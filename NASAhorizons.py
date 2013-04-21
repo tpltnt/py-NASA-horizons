@@ -55,7 +55,7 @@ class NASAhorizons(object):
 
     def get_data(self):
         """retrieve data from pre-defined context.
-        Right know fixed to Voyager I."""
+        Right know fixed to Voyager I and does not return valid data"""
         # fake test data
         data = [{'x': 23}, {'y': 42}]
         return json.dumps(data)
