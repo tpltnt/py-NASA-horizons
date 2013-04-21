@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import datetime
 import json
 import socket
 import telnetlib
@@ -53,10 +54,19 @@ class NASAhorizons(object):
         self.__objectid = idnumber
 
 
-    def get_data(self):
+    def get_data(self,start,end):
         """retrieve data from pre-defined context.
-        Right know fixed to Voyager I and does not return valid data"""
+        Right know fixed to Voyager I.
+
+        arguments:
+        * start: datetime.date indicating first datapoint to be requested
+        * end: datetime.date indicating last datapoint to be requested
+        """
         # TODO: check for data context
+        if not isinstance(start,datetime.date):
+            raise TypeError("start has to be a datetime.date-object")
+        if not isinstance(end,datetime.date):
+            raise TypeError("end has to be a datetime.date-object")
         if not self.has_session():
             self.create_session()
         # telnetstring represent user input (without RET)
@@ -82,6 +92,7 @@ class NASAhorizons(object):
         self.__telnetsession.write(telnetstring + b"\n")
         # start date
         self.__telnetsession.read_until(b"] : ")
+        ####--------------------------------------------######
         telnetstring = "1977-Sep-07".encode('ascii')
         self.__telnetsession.write(telnetstring + b"\n")
         # end date
@@ -140,11 +151,13 @@ class NASAhorizons(object):
                     z = float(fields[4].strip())
                     ))
         # fake test data
-        #data = [{'x': 23}, {'y': 42}]
+        # data = [{'x': 23}, {'y': 42}]
         return json.dumps(data)
 
 # only call if script is executed (and not included) for debugging
 if __name__ == '__main__':
     foo = NASAhorizons()
     foo.set_object_id(-31)
-    print(foo.get_data())
+    start = datetime.date(year=1970,month=9,day=10)
+    end = datetime.date(year=1970,month=9,day=20)
+    print(foo.get_data(start,end))
