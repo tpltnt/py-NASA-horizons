@@ -61,18 +61,75 @@ class NASAhorizons(object):
             self.create_session()
         # telnetstring represent user input (without RET)
         # select object
+        self.__telnetsession.read_until(b"Horizons> ")
         telnetstring = str(self.__objectid).encode('ascii')
         self.__telnetsession.write(telnetstring + b"\n")
         # select [E]phemeris
-        self.__telnetsession.read_until(b"<cr>:  ")
+        self.__telnetsession.read_until(b"<cr>: ")
         telnetstring = "E".encode('ascii')
         self.__telnetsession.write(telnetstring + b"\n")
-        "E v @0 eclip 1977-Sep-07 1977-Sep-10 1d n J2000 1 2 YES YES 1"
+        # select vectors
+        self.__telnetsession.read_until(b"[o,e,v,?] : ")
+        telnetstring = "v".encode('ascii')
+        self.__telnetsession.write(telnetstring + b"\n")
+        # select center-sun
+        self.__telnetsession.read_until(b"[ <id>,coord,geo  ] : ")
+        telnetstring = "@0".encode('ascii')
+        self.__telnetsession.write(telnetstring + b"\n")
+        # select reference plane
+        self.__telnetsession.read_until(b"[eclip, frame, body ] : ")
+        telnetstring = "eclip".encode('ascii')
+        self.__telnetsession.write(telnetstring + b"\n")
+        # start date
+        self.__telnetsession.read_until(b"] : ")
+        telnetstring = "1977-Sep-07".encode('ascii')
+        self.__telnetsession.write(telnetstring + b"\n")
+        # end date
+        self.__telnetsession.read_until(b"] : ")
+        telnetstring = "1977-Sep-10".encode('ascii')
+        self.__telnetsession.write(telnetstring + b"\n")
+        # select output interval
+        self.__telnetsession.read_until(b"] : ")
+        telnetstring = "1d".encode('ascii')
+        self.__telnetsession.write(telnetstring + b"\n")
+        # change output defaults 
+        self.__telnetsession.read_until(b"[ cr=(y), n, ?] : ")
+        telnetstring = "n".encode('ascii')
+        self.__telnetsession.write(telnetstring + b"\n")
+        # select output reference frame
+        self.__telnetsession.read_until(b"] : ")
+        telnetstring = "J2000".encode('ascii')
+        self.__telnetsession.write(telnetstring + b"\n")
+        # no light-time corrections
+        self.__telnetsession.read_until(b"]  : ")
+        telnetstring = "1".encode('ascii')
+        self.__telnetsession.write(telnetstring + b"\n")
+        # select AU-D as output unit
+        self.__telnetsession.read_until(b"] : ")
+        telnetstring = "2".encode('ascii')
+        self.__telnetsession.write(telnetstring + b"\n")
+        # select Spreadsheet CSV format
+        self.__telnetsession.read_until(b"] : ")
+        telnetstring = "YES".encode('ascii')
+        self.__telnetsession.write(telnetstring + b"\n")
+        # Label cartesian output
+        self.__telnetsession.read_until(b"] : ")
+        telnetstring = "YES".encode('ascii')
+        self.__telnetsession.write(telnetstring + b"\n")
+        # select only position components {x,y,z}
+        self.__telnetsession.read_until(b"] : ")
+        telnetstring = "1".encode('ascii')
+        self.__telnetsession.write(telnetstring + b"\n")
         # read stuff between $$SOE and $$EOE
-        # JDCT ,   , X, Y, Z,
-        self.__telnetsession.read_until(b"$$SOE")
-        sessioncontent = self.__telnetsession.read_until(b"$$EOE")
+        self.__telnetsession.read_until(b"$$SOE\n")
+        sessioncontent = self.__telnetsession.read_until(b"$$EOE\n")
         print(sessioncontent)
         # fake test data
         data = [{'x': 23}, {'y': 42}]
         return json.dumps(data)
+
+# only call if script is executed (and not included) for debugging
+if __name__ == '__main__':
+    foo = NASAhorizons()
+    foo.set_object_id(-31)
+    foo.get_data()
