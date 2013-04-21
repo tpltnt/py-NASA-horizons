@@ -60,8 +60,11 @@ class NASAhorizons(object):
         """
         if not isinstance(dateobject, datetime.date):
             raise TypeError("given date has to be datetime.date-object")
-        datestring = str(dateobject) + "-"
-        # crude cascade conversion
+
+        # convert year
+        datestring = str(dateobject.year) + "-"
+
+        # crude cascade conversion for month
         if 1 == dateobject.month:
             datestring += "Jan-"
         if 2 == dateobject.month:
@@ -89,7 +92,10 @@ class NASAhorizons(object):
         if 12 == dateobject.month:
             datestring += "Dez-"
 
-        return "foo"
+        # convert day
+        datestring += str(dateobject.day)
+
+        return datestring
 
 
     def get_data(self,start,end):
