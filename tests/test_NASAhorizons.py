@@ -1,3 +1,4 @@
+import datetime
 import json
 import sys
 sys.path.append('../py-NASA-horizons')
@@ -50,7 +51,19 @@ def test_set_object_id1000():
         foo.set_object_id(23)
 
 
-def test_get_data0():
-    """get (fake) data"""
+def test_convert_to_NASA_date0():
+    """test for accepting datetime.date objects"""
     foo = NASAhorizons()
-    assert '[{"x": 23}, {"y": 42}]' == foo.get_data()
+    pythondate = datetime.date(year=1977, month=9, day=10)
+    foo.convert_to_NASA_date(pythondate)
+
+
+def test_convert_to_NASA_date1():
+    """test for rejecting non-datetime.date objects (string)"""
+    foo = NASAhorizons()
+    with pytest.raises(TypeError):
+        foo.convert_to_NASA_date("1977-09-10")
+#def test_get_data0():
+#    """get (fake) data"""
+#    foo = NASAhorizons()
+#    assert '[{"x": 23}, {"y": 42}]' == foo.get_data()

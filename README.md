@@ -7,6 +7,11 @@ It uses the telnet interface.
 current strategy: set up a context to query (object and daterange) and
 retrieve data from it.
 
+TODO:
+
+* check convert_to_NASA_date() for completely correct conversation
+* create query-context
+* handle telnet errors
 
 references
 ==========
