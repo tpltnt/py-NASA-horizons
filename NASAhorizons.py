@@ -136,12 +136,11 @@ class NASAhorizons(object):
         self.__telnetsession.write(telnetstring + b"\n")
         # start date
         self.__telnetsession.read_until(b"] : ")
-        ####--------------------------------------------######
-        telnetstring = "1977-Sep-07".encode('ascii')
+        telnetstring = self.convert_to_NASA_date(start).encode('ascii')
         self.__telnetsession.write(telnetstring + b"\n")
         # end date
         self.__telnetsession.read_until(b"] : ")
-        telnetstring = "1977-Sep-10".encode('ascii')
+        telnetstring = self.convert_to_NASA_date(end).encode('ascii')
         self.__telnetsession.write(telnetstring + b"\n")
         # select output interval
         self.__telnetsession.read_until(b"] : ")
