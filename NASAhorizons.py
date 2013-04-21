@@ -8,7 +8,7 @@ class NASAhorizons(object):
     __telnetsession = None
     def __init__(self):
         self.create_telnetsession()
-        
+
 
     def create_telnetsession(self):
         """Creates a new telnet connection to the NASA HORIZONS data service.
@@ -32,7 +32,16 @@ class NASAhorizons(object):
             return True
 
     def close_session(self):
-        """Explictly close the session"""
+        """Explictly close the session."""
         self.__telnetsession.write(b"exit\n")
         self.__telnetsession.close()
         self.__telnetsession = None
+
+
+    def query_id(self,idnumber):
+        """Query an object by its HORIZON internal ID number.
+        Note that these are *not* the IAU or designation numbers.
+        Negative values indicate spacecrafts."""
+        # -31 = Voyager I (test object)
+        if not isinstance(idnumber,int):
+            raise TypeError("ID numbers need to be integers.")
