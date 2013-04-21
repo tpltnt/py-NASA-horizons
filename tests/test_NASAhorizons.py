@@ -63,6 +63,14 @@ def test_convert_to_NASA_date1():
     foo = NASAhorizons()
     with pytest.raises(TypeError):
         foo.convert_to_NASA_date("1977-09-10")
+
+
+def test_convert_to_NASA_date2():
+    """test for correct conversion"""
+    foo = NASAhorizons()
+    pythondate = datetime.date(year=1977, month=9, day=10)
+    assert "1977-Sep-10" == foo.convert_to_NASA_date(pythondate)
+
 #def test_get_data0():
 #    """get (fake) data"""
 #    foo = NASAhorizons()

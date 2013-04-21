@@ -54,6 +54,44 @@ class NASAhorizons(object):
         self.__objectid = idnumber
 
 
+    def convert_to_NASA_date(self, dateobject):
+        """convert given datetime.date-object to string in NASA format,
+        e.g. 1977-Sep-10
+        """
+        if not isinstance(dateobject, datetime.date):
+            raise TypeError("given date has to be datetime.date-object")
+        datestring = str(dateobject) + "-"
+        # crude cascade conversion
+        if 1 == dateobject.month:
+            datestring += "Jan-"
+        if 2 == dateobject.month:
+            datestring += "Feb-"
+        if 1 == dateobject.month:
+            datestring += "Jan-"
+        if 3 == dateobject.month:
+            datestring += "Mar-"
+        if 4 == dateobject.month:
+            datestring += "Apr-"
+        if 5 == dateobject.month:
+            datestring += "May-"
+        if 6 == dateobject.month:
+            datestring += "Jun-"
+        if 7 == dateobject.month:
+            datestring += "Jul-"
+        if 8 == dateobject.month:
+            datestring += "Aug-"
+        if 9 == dateobject.month:
+            datestring += "Sep-"
+        if 10 == dateobject.month:
+            datestring += "Oct-"
+        if 11 == dateobject.month:
+            datestring += "Nov-"
+        if 12 == dateobject.month:
+            datestring += "Dez-"
+
+        return "foo"
+
+
     def get_data(self,start,end):
         """retrieve data from pre-defined context.
         Right know fixed to Voyager I.
@@ -158,6 +196,6 @@ class NASAhorizons(object):
 if __name__ == '__main__':
     foo = NASAhorizons()
     foo.set_object_id(-31)
-    start = datetime.date(year=1970,month=9,day=10)
-    end = datetime.date(year=1970,month=9,day=20)
-    print(foo.get_data(start,end))
+    start = datetime.date(year=1977, month=9, day=10)
+    end = datetime.date(year=1977, month=9, day=20)
+    print(foo.get_data(start, end))
