@@ -1,3 +1,4 @@
+import json
 import sys
 sys.path.append('../py-NASA-horizons')
 import pytest
@@ -47,3 +48,9 @@ def test_set_object_id1000():
     foo = NASAhorizons()
     with pytest.raises(NotImplementedError):
         foo.set_object_id(23)
+
+
+def test_get_data0():
+    """get (fake) data"""
+    foo = NASAhorizons()
+    assert '[{"x": 23}, {"y": 42}]' == foo.get_data()

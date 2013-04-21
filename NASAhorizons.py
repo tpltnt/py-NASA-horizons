@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
+import json
 import socket
 import telnetlib
 
 class NASAhorizons(object):
     """a python wrapper for the NASA HORIZONS data service telnet interface"""
 
+    __objectid = None       # horizon interal object id to query
     __telnetsession = None
     def __init__(self):
         self.create_telnetsession()
@@ -31,6 +33,7 @@ class NASAhorizons(object):
         else:
             return True
 
+
     def close_session(self):
         """Explictly close the session."""
         self.__telnetsession.write(b"exit\n")
@@ -47,3 +50,12 @@ class NASAhorizons(object):
             raise TypeError("ID numbers need to be integers.")
         if -31 != idnumber:
             raise NotImplementedError("sorry, did not found the time to implement that")
+        self.__objectid = idnumber
+
+
+    def get_data(self):
+        """retrieve data from pre-defined context.
+        Right know fixed to Voyager I."""
+        # fake test data
+        data = [{'x': 23}, {'y': 42}]
+        return json.dumps(data)
