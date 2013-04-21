@@ -121,15 +121,30 @@ class NASAhorizons(object):
         telnetstring = "1".encode('ascii')
         self.__telnetsession.write(telnetstring + b"\n")
         # read stuff between $$SOE and $$EOE
-        self.__telnetsession.read_until(b"$$SOE\n")
-        sessioncontent = self.__telnetsession.read_until(b"$$EOE\n")
-        print(sessioncontent)
+        self.__telnetsession.read_until(b"$$SOE")
+        sessioncontent = self.__telnetsession.read_until(b"$$EOE")
+        # chunk the session content into lines again
+        datalines = str(sessioncontent).split("\\r\\n")
+        # remove $$SOE & $$EOE part
+        del datalines[0]
+        del datalines[-1]
+        print(datalines)
+        data = []
+        for line in datalines:
+            fields = line.split(",")
+            # put all the thing in the data to be returned
+            data.append(dict(
+                    date = fields[1].strip(),
+                    x = float(fields[2].strip()),
+                    y = float(fields[3].strip()),
+                    z = float(fields[4].strip())
+                    ))
         # fake test data
-        data = [{'x': 23}, {'y': 42}]
+        #data = [{'x': 23}, {'y': 42}]
         return json.dumps(data)
 
 # only call if script is executed (and not included) for debugging
 if __name__ == '__main__':
     foo = NASAhorizons()
     foo.set_object_id(-31)
-    foo.get_data()
+    print(foo.get_data())
