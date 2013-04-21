@@ -12,4 +12,6 @@ references
 ==========
 * [NASA HORIZONS page](http://ssd.jpl.nasa.gov/?horizons)
 * [RFC 854 - telnet](http://tools.ietf.org/html/rfc854.html)
+* [RFC 4180 - CSV](http://tools.ietf.org/html/rfc4180.html)
+* [RFC 4627 - JSON](http://tools.ietf.org/html/rfc4627) and [json.org](http://json.org/)
 * [pytest testing framework](http://www.pytest.org)
