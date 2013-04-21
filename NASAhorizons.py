@@ -104,7 +104,7 @@ class NASAhorizons(object):
         if not isinstance(nasadate,str):
             raise TypeError("i want to eat strings, nothing else ... nom nom nom")
         # "A.D. 1977-Sep-10 00:00:00.0000"
-        datechunk = nasadate.replace("A.D.  ","")
+        datechunk = nasadate.replace("A.D. ", "")
         datechunk = datechunk.replace(" 00:00:00.0000", "")
         # crude reverse month cascade
         datechunk = datechunk.replace("Jan", "01")
@@ -213,7 +213,7 @@ class NASAhorizons(object):
             fields = line.split(",")
             # put all the thing in the data to be returned
             data.append(dict(
-                    date = fields[1].strip(),
+                    date = self.convert_NASA_to_ISO_datestring(fields[1].strip()),
                     x = float(fields[2].strip()),
                     y = float(fields[3].strip()),
                     z = float(fields[4].strip())
