@@ -38,8 +38,8 @@ class NASAhorizons(object):
         self.__telnetsession = None
 
 
-    def query_id(self,idnumber):
-        """Query an object by its HORIZON internal ID number.
+    def set_object_id(self,idnumber):
+        """Select object by its HORIZON internal ID number.
         Note that these are *not* the IAU or designation numbers.
         Negative values indicate spacecrafts."""
         # -31 = Voyager I (test object)

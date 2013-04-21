@@ -29,14 +29,14 @@ def test_close_session():
     assert foo.has_session() is False
 
 
-def test_query_id0():
-    """test to query Voyager I (id = -31)"""
+def test_set_object_id0():
+    """test to set object id (Voyager I = -31)"""
     foo = NASAhorizons()
-    foo.query_id(-31)
+    foo.set_object_id(-31)
 
 
-def test_query_id1():
+def test_set_object_id1():
     """test for non-integer id rejection (string)"""
     foo = NASAhorizons()
     with pytest.raises(TypeError):
-        foo.query_id('-31')
+        foo.set_object_id('-31')
