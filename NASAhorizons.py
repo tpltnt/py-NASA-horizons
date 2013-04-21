@@ -98,6 +98,31 @@ class NASAhorizons(object):
         return datestring
 
 
+    def convert_NASA_to_ISO_datestring(self, nasadate):
+        """Convert a NASA string to ISO format. Right now it only
+        converts dates, not complete timestamps"""
+        if not isinstance(nasadate,str):
+            raise TypeError("i want to eat strings, nothing else ... nom nom nom")
+        # "A.D. 1977-Sep-10 00:00:00.0000"
+        datechunk = nasadate.replace("A.D.  ","")
+        datechunk = datechunk.replace(" 00:00:00.0000", "")
+        # crude reverse month cascade
+        datechunk = datechunk.replace("Jan", "01")
+        datechunk = datechunk.replace("Feb", "02")
+        datechunk = datechunk.replace("Mar", "03")
+        datechunk = datechunk.replace("Apr", "04")
+        datechunk = datechunk.replace("May", "05")
+        datechunk = datechunk.replace("Jun", "06")
+        datechunk = datechunk.replace("Jul", "07")
+        datechunk = datechunk.replace("Aug", "08")
+        datechunk = datechunk.replace("Sep", "09")
+        datechunk = datechunk.replace("Oct", "10")
+        datechunk = datechunk.replace("Nov", "11")
+        datechunk = datechunk.replace("Dez", "12")
+
+        return datechunk
+
+
     def get_data(self,start,end):
         """retrieve data from pre-defined context.
         Right know fixed to Voyager I.
