@@ -59,10 +59,20 @@ class NASAhorizons(object):
         # TODO: check for data context
         if not self.has_session():
             self.create_session()
-        "-31 E v @0 eclip 1977-Sep-07 1977-Sep-10 1d n J2000 1 2 YES YES 1"
+        # telnetstring represent user input (without RET)
+        # select object
+        telnetstring = str(self.__objectid).encode('ascii')
+        self.__telnetsession.write(telnetstring + b"\n")
+        # select [E]phemeris
+        self.__telnetsession.read_until(b"<cr>:  ")
+        telnetstring = "E".encode('ascii')
+        self.__telnetsession.write(telnetstring + b"\n")
+        "E v @0 eclip 1977-Sep-07 1977-Sep-10 1d n J2000 1 2 YES YES 1"
         # read stuff between $$SOE and $$EOE
         # JDCT ,   , X, Y, Z,
         self.__telnetsession.read_until(b"$$SOE")
+        sessioncontent = self.__telnetsession.read_until(b"$$EOE")
+        print(sessioncontent)
         # fake test data
         data = [{'x': 23}, {'y': 42}]
         return json.dumps(data)
