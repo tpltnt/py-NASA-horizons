@@ -4,6 +4,9 @@ py-NASA-horizons
 A pure python3 wrapper for JPL HORIZONS on-line solar system data and ephemeris computation service.
 It uses the telnet interface.
 
+current strategy: set up a context to query (object and daterange) and
+retrieve data from it.
+
 
 references
 ==========
