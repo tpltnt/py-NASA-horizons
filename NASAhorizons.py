@@ -30,3 +30,9 @@ class NASAhorizons(object):
             return False
         else:
             return True
+
+    def close_session(self):
+        """Explictly close the session"""
+        self.__telnetsession.write(b"exit\n")
+        self.__telnetsession.close()
+        self.__telnetsession = None

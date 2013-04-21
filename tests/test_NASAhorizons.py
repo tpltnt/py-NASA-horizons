@@ -19,3 +19,11 @@ def test_create_telnetsession():
     """test to create a telnet session. This should not time out."""
     foo = NASAhorizons()
     foo.create_telnetsession()
+
+
+def test_close_session():
+    """test to close the session
+    explicily test for non-existence at the end"""
+    foo = NASAhorizons()
+    foo.close_session()
+    assert foo.has_session() is False
