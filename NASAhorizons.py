@@ -9,7 +9,7 @@ class NASAhorizons(object):
     __objectid = None       # horizon interal object id to query
     __telnetsession = None
     def __init__(self):
-        self.create_telnetsession()
+        self.create_session()
 
 
     def create_session(self):

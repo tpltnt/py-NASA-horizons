@@ -19,7 +19,7 @@ def test_init1():
 def test_create_telnetsession():
     """test to create a telnet session. This should not time out."""
     foo = NASAhorizons()
-    foo.create_telnetsession()
+    foo.create_session()
 
 
 def test_close_session():
