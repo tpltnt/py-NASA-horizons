@@ -7,7 +7,7 @@ class NASAhorizons(object):
 
     __telnetsession = None
     def __init__(self):
-        self.__telnetsession = self.create_telnetsession()
+        self.create_telnetsession()
         
 
     def create_telnetsession(self):
@@ -22,6 +22,7 @@ class NASAhorizons(object):
             self.__telnetsession = telnetlib.Telnet(host, port, timeout)
         except socket.timeout:
             raise IOError("socket timed out")
+
 
     def has_session(self):
         """A simple self test if a session already exits."""
