@@ -40,3 +40,10 @@ def test_set_object_id1():
     foo = NASAhorizons()
     with pytest.raises(TypeError):
         foo.set_object_id('-31')
+
+
+def test_set_object_id1000():
+    """temporary test to catch unfullfillable requests."""
+    foo = NASAhorizons()
+    with pytest.raises(NotImplementedError):
+        foo.set_object_id(23)

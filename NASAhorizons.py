@@ -45,3 +45,5 @@ class NASAhorizons(object):
         # -31 = Voyager I (test object)
         if not isinstance(idnumber,int):
             raise TypeError("ID numbers need to be integers.")
+        if -31 != idnumber:
+            raise NotImplementedError("sorry, did not found the time to implement that")
