@@ -7,7 +7,8 @@ class NASAhorizons(object):
 
     __telnetsession = None
     def __init__(self):
-        print("foo")
+        self.__telnetsession = self.create_telnetsession()
+        
 
     def create_telnetsession(self):
         """Creates a new telnet connection to the NASA HORIZONS data service.
