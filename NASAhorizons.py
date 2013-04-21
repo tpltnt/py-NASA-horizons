@@ -12,7 +12,7 @@ class NASAhorizons(object):
         self.create_telnetsession()
 
 
-    def create_telnetsession(self):
+    def create_session(self):
         """Creates a new telnet connection to the NASA HORIZONS data service.
         Calling this method *will destroy* your old connection."""
         
@@ -56,6 +56,13 @@ class NASAhorizons(object):
     def get_data(self):
         """retrieve data from pre-defined context.
         Right know fixed to Voyager I and does not return valid data"""
+        # TODO: check for data context
+        if not self.has_session():
+            self.create_session()
+        "-31 E v @0 eclip 1977-Sep-07 1977-Sep-10 1d n J2000 1 2 YES YES 1"
+        # read stuff between $$SOE and $$EOE
+        # JDCT ,   , X, Y, Z,
+        self.__telnetsession.read_until(b"$$SOE")
         # fake test data
         data = [{'x': 23}, {'y': 42}]
         return json.dumps(data)
