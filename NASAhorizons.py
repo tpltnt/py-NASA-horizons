@@ -124,7 +124,7 @@ class NASAhorizons(object):
 
 
     def get_data(self,start,end):
-        """retrieve data from pre-defined context.
+        """Retrieve data (xyz-coordinates) from pre-defined context.
         Right know fixed to Voyager I.
 
         arguments:
