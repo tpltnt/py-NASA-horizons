@@ -71,6 +71,12 @@ def test_convert_to_NASA_date2():
     pythondate = datetime.date(year=1977, month=9, day=10)
     assert "1977-Sep-10" == foo.convert_to_NASA_date(pythondate)
 
+
+def test_convert_NASA_to_ISO_datestring1():
+    """test for non-string rejection"""
+    foo = NASAhorizons()
+    with pytest.raises(TypeError):
+        foo.convert_NASA_to_ISO_datestring(23)
 #def test_get_data0():
 #    """get (fake) data"""
 #    foo = NASAhorizons()
