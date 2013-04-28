@@ -22,7 +22,14 @@ telnetstring = "MB".encode('ascii')
 telnetsession.write(telnetstring + b"\n")
 # major bodies
 sessioncontent = telnetsession.read_until(b"Use ID# to make unique selection.")
-print(sessioncontent)
+# chunk the session content into lines again
+datalines = str(sessioncontent).split("\\r\\n")
+# delete crust
+for i in range(0,6):
+    del datalines[0]
+del datalines[-2]
+
+print(datalines)
 
 # close session
 telnetsession.write(b"exit\n")
