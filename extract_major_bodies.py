@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-import datetime
-import json
+import yaml
 import socket
 import telnetlib
 
@@ -40,8 +39,25 @@ if len(datalines) < counter:
     raise IOError("too few datapoints received")
 if len(datalines) > counter:
     raise IOError("received more datapoints than expected")
+allobjects = []
+for line in datalines:
+    # [{},{}]
+    idnumber = int(line[0:9].strip())
+    name = line[11:45].strip()
+    if "" == name:
+        name = None
+    designation = line[46:57].strip()
+    if "" == designation:
+        designation = None
+    other = line[59:80].strip()
+    if "" == other:
+        other = None
+    dataset = dict(idnumber=idnumber,
+                   designation=designation,
+                   other=other)
+    allobjects.append(dataset)
 
-
+print(allobjects)
 # close session
 telnetsession.write(b"exit\n")
 telnetsession.close()
