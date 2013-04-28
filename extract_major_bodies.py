@@ -39,6 +39,11 @@ if len(datalines) < counter:
     raise IOError("too few datapoints received")
 if len(datalines) > counter:
     raise IOError("received more datapoints than expected")
+# close session
+telnetsession.write(b"quit\n")
+telnetsession.close()
+
+# parse data into list of dictionaries
 allobjects = []
 for line in datalines:
     # [{},{}]
@@ -57,7 +62,7 @@ for line in datalines:
                    other=other)
     allobjects.append(dataset)
 
-print(allobjects)
-# close session
-telnetsession.write(b"exit\n")
-telnetsession.close()
+# dump data into file
+yamlfile  = open('majorbodies.yaml','w')
+yaml.dump(allobjects,yamlfile)
+yamlfile.close()
