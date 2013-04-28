@@ -28,8 +28,19 @@ datalines = str(sessioncontent).split("\\r\\n")
 for i in range(0,6):
     del datalines[0]
 del datalines[-2]
+# extract number of records
+counter = datalines[-1]
+counter = counter.split("=")[1].strip()
+counter = counter.split(".")[0]
+counter = int(counter)
+# delete last line (contained counter)
+del datalines[-1]
+# check for full retrieval
+if len(datalines) < counter:
+    raise IOError("too few datapoints received")
+if len(datalines) > counter:
+    raise IOError("received more datapoints than expected")
 
-print(datalines)
 
 # close session
 telnetsession.write(b"exit\n")
