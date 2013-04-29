@@ -6,11 +6,11 @@ import telnetlib
 """a simple script to extract major body object information
 from NASA HORIZON and create a reST table/cheatsheet."""
 
-host    = "horizons.jpl.nasa.gov"
-port    = 6775
+host = "horizons.jpl.nasa.gov"
+port = 6775
 timeout = 9999
 telnetsession = None
-headings = ["ID number", "name", "designation","IAU/other"] # for final table
+headings = ["ID number", "name", "designation", "IAU/other"]  # for final table
 
 try:
     telnetsession = telnetlib.Telnet(host, port, timeout)
@@ -25,7 +25,7 @@ sessioncontent = telnetsession.read_until(b"Use ID# to make unique selection.")
 # chunk the session content into lines again
 datalines = str(sessioncontent).split("\\r\\n")
 # delete crust
-for i in range(0,6):
+for i in range(0, 6):
     del datalines[0]
 del datalines[-2]
 # extract number of records
@@ -90,7 +90,7 @@ if maxother < len(headings[3]):
     maxother = len(headings[3])
 
 ## flush out the data
-rstfile = open('major_body_sheet.rst','w')
+rstfile = open('major_body_sheet.rst', 'w')
 rstfile.write("Major Bodies Overview\n")
 rstfile.write("=====================\n\n")
 rstfile.write("This page provides an overview over all major bodies where")
@@ -154,7 +154,7 @@ for dataset in allobjects:
     rstfile.write(str(dataset['name']))
     for i in range(maxname - len(str(dataset['name']))):
         rstfile.write(" ")
-    rstfile.write(" | ")    
+    rstfile.write(" | ")
     rstfile.write(str(dataset['designation']))
     for i in range(maxdes - len(str(dataset['designation']))):
         rstfile.write(" ")
