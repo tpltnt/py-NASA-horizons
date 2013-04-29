@@ -52,8 +52,6 @@ class NASAhorizons(object):
         # -31 = Voyager I (test object)
         if not isinstance(idnumber,int):
             raise TypeError("ID numbers need to be integers.")
-        if -31 != idnumber:
-            raise NotImplementedError("sorry, did not found the time to implement that")
         self.__objectid = idnumber
 
 
@@ -213,7 +211,6 @@ class NASAhorizons(object):
         # remove $$SOE & $$EOE part
         del datalines[0]
         del datalines[-1]
-        print(datalines)
         data = []
         for line in datalines:
             fields = line.split(",")
@@ -231,7 +228,7 @@ class NASAhorizons(object):
 # only call if script is executed (and not included) for debugging
 if __name__ == '__main__':
     foo = NASAhorizons()
-    foo.set_object_id(-31)
+    foo.set_object_id(199)
     start = datetime.date(year=1977, month=9, day=10)
     end = datetime.date(year=1977, month=9, day=20)
     print(foo.get_data(start, end))
