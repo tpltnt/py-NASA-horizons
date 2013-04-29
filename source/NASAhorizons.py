@@ -236,11 +236,3 @@ class NASAhorizons(object):
         # fake test data
         # data = [{'x': 23}, {'y': 42}]
         return json.dumps(data)
-
-# only call if script is executed (and not included) for debugging
-if __name__ == '__main__':
-    foo = NASAhorizons()
-    foo.set_object_id(199)
-    start = datetime.date(year=1977, month=9, day=10)
-    end = datetime.date(year=1977, month=9, day=20)
-    print(foo.get_data(start, end))
