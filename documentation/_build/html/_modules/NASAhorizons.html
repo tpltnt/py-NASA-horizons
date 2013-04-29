@@ -1,0 +1,323 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>NASAhorizons &mdash; py-NASA-horizon 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="py-NASA-horizon 0.1 documentation" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">py-NASA-horizon 0.1 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for NASAhorizons</h1><div class="highlight"><pre>
+<span class="c">#!/usr/bin/env python3</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">socket</span>
+<span class="kn">import</span> <span class="nn">telnetlib</span>
+
+
+<div class="viewcode-block" id="NASAhorizons"><a class="viewcode-back" href="../index.html#NASAhorizons.NASAhorizons">[docs]</a><span class="k">class</span> <span class="nc">NASAhorizons</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A python wrapper for the NASA HORIZONS data service telnet interface</span>
+<span class="sd">    to query xyz-coordinates of objects. It uses the ICRF/J2000.0 reference</span>
+<span class="sd">    frame.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">__referenceframe</span> <span class="o">=</span> <span class="s">&quot;J2000&quot;</span>
+    <span class="n">__objectid</span> <span class="o">=</span> <span class="bp">None</span>       <span class="c"># horizon interal object id to query</span>
+    <span class="n">__telnetsession</span> <span class="o">=</span> <span class="bp">None</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">create_session</span><span class="p">()</span>
+
+<div class="viewcode-block" id="NASAhorizons.create_session"><a class="viewcode-back" href="../index.html#NASAhorizons.NASAhorizons.create_session">[docs]</a>    <span class="k">def</span> <span class="nf">create_session</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Creates a new telnet connection to the NASA HORIZONS data service.</span>
+<span class="sd">        Calling this method *will destroy* your old connection.&quot;&quot;&quot;</span>
+
+        <span class="n">host</span> <span class="o">=</span> <span class="s">&quot;horizons.jpl.nasa.gov&quot;</span>
+        <span class="n">port</span> <span class="o">=</span> <span class="mi">6775</span>
+        <span class="n">timeout</span> <span class="o">=</span> <span class="mi">9999</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__telnetsession</span> <span class="o">=</span> <span class="n">telnetlib</span><span class="o">.</span><span class="n">Telnet</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">,</span> <span class="n">timeout</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">socket</span><span class="o">.</span><span class="n">timeout</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s">&quot;socket timed out&quot;</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="NASAhorizons.has_session"><a class="viewcode-back" href="../index.html#NASAhorizons.NASAhorizons.has_session">[docs]</a>    <span class="k">def</span> <span class="nf">has_session</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;A simple self test if a session already exits.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">None</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">__telnetsession</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">True</span>
+</div>
+<div class="viewcode-block" id="NASAhorizons.close_session"><a class="viewcode-back" href="../index.html#NASAhorizons.NASAhorizons.close_session">[docs]</a>    <span class="k">def</span> <span class="nf">close_session</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Explictly close the session.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__telnetsession</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">b</span><span class="s">&quot;exit</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__telnetsession</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__telnetsession</span> <span class="o">=</span> <span class="bp">None</span>
+</div>
+<div class="viewcode-block" id="NASAhorizons.set_object_id"><a class="viewcode-back" href="../index.html#NASAhorizons.NASAhorizons.set_object_id">[docs]</a>    <span class="k">def</span> <span class="nf">set_object_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idnumber</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Select object by its HORIZON internal ID number.</span>
+<span class="sd">        Note that these are *not* the IAU or designation numbers.</span>
+<span class="sd">        Negative values indicate spacecrafts.&quot;&quot;&quot;</span>
+        <span class="c"># -31 = Voyager I (test object)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">idnumber</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;ID numbers need to be integers.&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__objectid</span> <span class="o">=</span> <span class="n">idnumber</span>
+</div>
+<div class="viewcode-block" id="NASAhorizons.convert_to_NASA_date"><a class="viewcode-back" href="../index.html#NASAhorizons.NASAhorizons.convert_to_NASA_date">[docs]</a>    <span class="k">def</span> <span class="nf">convert_to_NASA_date</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dateobject</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;convert given datetime.date-object to string in NASA format,</span>
+<span class="sd">        e.g. 1977-Sep-10</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dateobject</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;given date has to be datetime.date-object&quot;</span><span class="p">)</span>
+
+        <span class="c"># convert year</span>
+        <span class="n">datestring</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">dateobject</span><span class="o">.</span><span class="n">year</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;-&quot;</span>
+
+        <span class="c"># crude cascade conversion for month</span>
+        <span class="k">if</span> <span class="mi">1</span> <span class="o">==</span> <span class="n">dateobject</span><span class="o">.</span><span class="n">month</span><span class="p">:</span>
+            <span class="n">datestring</span> <span class="o">+=</span> <span class="s">&quot;Jan-&quot;</span>
+        <span class="k">if</span> <span class="mi">2</span> <span class="o">==</span> <span class="n">dateobject</span><span class="o">.</span><span class="n">month</span><span class="p">:</span>
+            <span class="n">datestring</span> <span class="o">+=</span> <span class="s">&quot;Feb-&quot;</span>
+        <span class="k">if</span> <span class="mi">1</span> <span class="o">==</span> <span class="n">dateobject</span><span class="o">.</span><span class="n">month</span><span class="p">:</span>
+            <span class="n">datestring</span> <span class="o">+=</span> <span class="s">&quot;Jan-&quot;</span>
+        <span class="k">if</span> <span class="mi">3</span> <span class="o">==</span> <span class="n">dateobject</span><span class="o">.</span><span class="n">month</span><span class="p">:</span>
+            <span class="n">datestring</span> <span class="o">+=</span> <span class="s">&quot;Mar-&quot;</span>
+        <span class="k">if</span> <span class="mi">4</span> <span class="o">==</span> <span class="n">dateobject</span><span class="o">.</span><span class="n">month</span><span class="p">:</span>
+            <span class="n">datestring</span> <span class="o">+=</span> <span class="s">&quot;Apr-&quot;</span>
+        <span class="k">if</span> <span class="mi">5</span> <span class="o">==</span> <span class="n">dateobject</span><span class="o">.</span><span class="n">month</span><span class="p">:</span>
+            <span class="n">datestring</span> <span class="o">+=</span> <span class="s">&quot;May-&quot;</span>
+        <span class="k">if</span> <span class="mi">6</span> <span class="o">==</span> <span class="n">dateobject</span><span class="o">.</span><span class="n">month</span><span class="p">:</span>
+            <span class="n">datestring</span> <span class="o">+=</span> <span class="s">&quot;Jun-&quot;</span>
+        <span class="k">if</span> <span class="mi">7</span> <span class="o">==</span> <span class="n">dateobject</span><span class="o">.</span><span class="n">month</span><span class="p">:</span>
+            <span class="n">datestring</span> <span class="o">+=</span> <span class="s">&quot;Jul-&quot;</span>
+        <span class="k">if</span> <span class="mi">8</span> <span class="o">==</span> <span class="n">dateobject</span><span class="o">.</span><span class="n">month</span><span class="p">:</span>
+            <span class="n">datestring</span> <span class="o">+=</span> <span class="s">&quot;Aug-&quot;</span>
+        <span class="k">if</span> <span class="mi">9</span> <span class="o">==</span> <span class="n">dateobject</span><span class="o">.</span><span class="n">month</span><span class="p">:</span>
+            <span class="n">datestring</span> <span class="o">+=</span> <span class="s">&quot;Sep-&quot;</span>
+        <span class="k">if</span> <span class="mi">10</span> <span class="o">==</span> <span class="n">dateobject</span><span class="o">.</span><span class="n">month</span><span class="p">:</span>
+            <span class="n">datestring</span> <span class="o">+=</span> <span class="s">&quot;Oct-&quot;</span>
+        <span class="k">if</span> <span class="mi">11</span> <span class="o">==</span> <span class="n">dateobject</span><span class="o">.</span><span class="n">month</span><span class="p">:</span>
+            <span class="n">datestring</span> <span class="o">+=</span> <span class="s">&quot;Nov-&quot;</span>
+        <span class="k">if</span> <span class="mi">12</span> <span class="o">==</span> <span class="n">dateobject</span><span class="o">.</span><span class="n">month</span><span class="p">:</span>
+            <span class="n">datestring</span> <span class="o">+=</span> <span class="s">&quot;Dez-&quot;</span>
+
+        <span class="c"># convert day</span>
+        <span class="n">datestring</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="n">dateobject</span><span class="o">.</span><span class="n">day</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">datestring</span>
+</div>
+<div class="viewcode-block" id="NASAhorizons.convert_NASA_to_ISO_datestring"><a class="viewcode-back" href="../index.html#NASAhorizons.NASAhorizons.convert_NASA_to_ISO_datestring">[docs]</a>    <span class="k">def</span> <span class="nf">convert_NASA_to_ISO_datestring</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nasadate</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Convert a NASA string to an ISO 8601 like format. The</span>
+<span class="sd">        time is in Barycentric Dynamical Time.&quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">nasadate</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;i want to eat strings, nothing else ... nom nom nom&quot;</span><span class="p">)</span>
+        <span class="c"># example: &quot;A.D. 1977-Sep-10 00:00:00.0000&quot;</span>
+        <span class="c"># AD vs BC</span>
+        <span class="n">datechunk</span> <span class="o">=</span> <span class="n">nasadate</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&quot;A.D. &quot;</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="p">)</span>
+        <span class="n">datechunk</span> <span class="o">=</span> <span class="n">datechunk</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&quot;B.C. &quot;</span><span class="p">,</span> <span class="s">&quot;-&quot;</span><span class="p">)</span>
+        <span class="c"># crude reverse month cascade</span>
+        <span class="n">datechunk</span> <span class="o">=</span> <span class="n">datechunk</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&quot;Jan&quot;</span><span class="p">,</span> <span class="s">&quot;01&quot;</span><span class="p">)</span>
+        <span class="n">datechunk</span> <span class="o">=</span> <span class="n">datechunk</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&quot;Feb&quot;</span><span class="p">,</span> <span class="s">&quot;02&quot;</span><span class="p">)</span>
+        <span class="n">datechunk</span> <span class="o">=</span> <span class="n">datechunk</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&quot;Mar&quot;</span><span class="p">,</span> <span class="s">&quot;03&quot;</span><span class="p">)</span>
+        <span class="n">datechunk</span> <span class="o">=</span> <span class="n">datechunk</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&quot;Apr&quot;</span><span class="p">,</span> <span class="s">&quot;04&quot;</span><span class="p">)</span>
+        <span class="n">datechunk</span> <span class="o">=</span> <span class="n">datechunk</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&quot;May&quot;</span><span class="p">,</span> <span class="s">&quot;05&quot;</span><span class="p">)</span>
+        <span class="n">datechunk</span> <span class="o">=</span> <span class="n">datechunk</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&quot;Jun&quot;</span><span class="p">,</span> <span class="s">&quot;06&quot;</span><span class="p">)</span>
+        <span class="n">datechunk</span> <span class="o">=</span> <span class="n">datechunk</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&quot;Jul&quot;</span><span class="p">,</span> <span class="s">&quot;07&quot;</span><span class="p">)</span>
+        <span class="n">datechunk</span> <span class="o">=</span> <span class="n">datechunk</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&quot;Aug&quot;</span><span class="p">,</span> <span class="s">&quot;08&quot;</span><span class="p">)</span>
+        <span class="n">datechunk</span> <span class="o">=</span> <span class="n">datechunk</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&quot;Sep&quot;</span><span class="p">,</span> <span class="s">&quot;09&quot;</span><span class="p">)</span>
+        <span class="n">datechunk</span> <span class="o">=</span> <span class="n">datechunk</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&quot;Oct&quot;</span><span class="p">,</span> <span class="s">&quot;10&quot;</span><span class="p">)</span>
+        <span class="n">datechunk</span> <span class="o">=</span> <span class="n">datechunk</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&quot;Nov&quot;</span><span class="p">,</span> <span class="s">&quot;11&quot;</span><span class="p">)</span>
+        <span class="n">datechunk</span> <span class="o">=</span> <span class="n">datechunk</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&quot;Dez&quot;</span><span class="p">,</span> <span class="s">&quot;12&quot;</span><span class="p">)</span>
+        <span class="c"># split date from time</span>
+        <span class="n">datechunk</span> <span class="o">=</span> <span class="n">datechunk</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&quot; &quot;</span><span class="p">,</span> <span class="s">&quot;T&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">datechunk</span>
+</div>
+<div class="viewcode-block" id="NASAhorizons.get_data"><a class="viewcode-back" href="../index.html#NASAhorizons.NASAhorizons.get_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Retrieve data (xyz-coordinates) for formerly</span>
+<span class="sd">        set object.</span>
+
+<span class="sd">        arguments:</span>
+<span class="sd">        * start: datetime.date indicating first datapoint to be requested</span>
+<span class="sd">        * end: datetime.date indicating last datapoint to be requested</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c"># TODO: check for data context</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;start has to be a datetime.date-object&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">end</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;end has to be a datetime.date-object&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">has_session</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">create_session</span><span class="p">()</span>
+        <span class="c"># telnetstring represent user input (without RET)</span>
+        <span class="c"># select object</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__telnetsession</span><span class="o">.</span><span class="n">read_until</span><span class="p">(</span><span class="n">b</span><span class="s">&quot;Horizons&gt; &quot;</span><span class="p">)</span>
+        <span class="n">telnetstring</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__objectid</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s">&#39;ascii&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__telnetsession</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">telnetstring</span> <span class="o">+</span> <span class="n">b</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+        <span class="c"># select [E]phemeris</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__telnetsession</span><span class="o">.</span><span class="n">read_until</span><span class="p">(</span><span class="n">b</span><span class="s">&quot;&lt;cr&gt;: &quot;</span><span class="p">)</span>
+        <span class="n">telnetstring</span> <span class="o">=</span> <span class="s">&quot;E&quot;</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s">&#39;ascii&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__telnetsession</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">telnetstring</span> <span class="o">+</span> <span class="n">b</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+        <span class="c"># select vectors</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__telnetsession</span><span class="o">.</span><span class="n">read_until</span><span class="p">(</span><span class="n">b</span><span class="s">&quot;[o,e,v,?] : &quot;</span><span class="p">)</span>
+        <span class="n">telnetstring</span> <span class="o">=</span> <span class="s">&quot;v&quot;</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s">&#39;ascii&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__telnetsession</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">telnetstring</span> <span class="o">+</span> <span class="n">b</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+        <span class="c"># select center-sun</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__telnetsession</span><span class="o">.</span><span class="n">read_until</span><span class="p">(</span><span class="n">b</span><span class="s">&quot;[ &lt;id&gt;,coord,geo  ] : &quot;</span><span class="p">)</span>
+        <span class="n">telnetstring</span> <span class="o">=</span> <span class="s">&quot;@0&quot;</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s">&#39;ascii&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__telnetsession</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">telnetstring</span> <span class="o">+</span> <span class="n">b</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+        <span class="c"># select reference plane</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__telnetsession</span><span class="o">.</span><span class="n">read_until</span><span class="p">(</span><span class="n">b</span><span class="s">&quot;[eclip, frame, body ] : &quot;</span><span class="p">)</span>
+        <span class="n">telnetstring</span> <span class="o">=</span> <span class="s">&quot;eclip&quot;</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s">&#39;ascii&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__telnetsession</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">telnetstring</span> <span class="o">+</span> <span class="n">b</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+        <span class="c"># start date</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__telnetsession</span><span class="o">.</span><span class="n">read_until</span><span class="p">(</span><span class="n">b</span><span class="s">&quot;] : &quot;</span><span class="p">)</span>
+        <span class="n">telnetstring</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">convert_to_NASA_date</span><span class="p">(</span><span class="n">start</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s">&#39;ascii&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__telnetsession</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">telnetstring</span> <span class="o">+</span> <span class="n">b</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+        <span class="c"># end date</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__telnetsession</span><span class="o">.</span><span class="n">read_until</span><span class="p">(</span><span class="n">b</span><span class="s">&quot;] : &quot;</span><span class="p">)</span>
+        <span class="n">telnetstring</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">convert_to_NASA_date</span><span class="p">(</span><span class="n">end</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s">&#39;ascii&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__telnetsession</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">telnetstring</span> <span class="o">+</span> <span class="n">b</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+        <span class="c"># select output interval</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__telnetsession</span><span class="o">.</span><span class="n">read_until</span><span class="p">(</span><span class="n">b</span><span class="s">&quot;] : &quot;</span><span class="p">)</span>
+        <span class="n">telnetstring</span> <span class="o">=</span> <span class="s">&quot;1d&quot;</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s">&#39;ascii&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__telnetsession</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">telnetstring</span> <span class="o">+</span> <span class="n">b</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+        <span class="c"># change output defaults</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__telnetsession</span><span class="o">.</span><span class="n">read_until</span><span class="p">(</span><span class="n">b</span><span class="s">&quot;[ cr=(y), n, ?] : &quot;</span><span class="p">)</span>
+        <span class="n">telnetstring</span> <span class="o">=</span> <span class="s">&quot;n&quot;</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s">&#39;ascii&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__telnetsession</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">telnetstring</span> <span class="o">+</span> <span class="n">b</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+        <span class="c"># select output reference frame</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__telnetsession</span><span class="o">.</span><span class="n">read_until</span><span class="p">(</span><span class="n">b</span><span class="s">&quot;] : &quot;</span><span class="p">)</span>
+        <span class="n">telnetstring</span> <span class="o">=</span> <span class="s">&quot;J2000&quot;</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s">&#39;ascii&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__telnetsession</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">telnetstring</span> <span class="o">+</span> <span class="n">b</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+        <span class="c"># no light-time corrections</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__telnetsession</span><span class="o">.</span><span class="n">read_until</span><span class="p">(</span><span class="n">b</span><span class="s">&quot;]  : &quot;</span><span class="p">)</span>
+        <span class="n">telnetstring</span> <span class="o">=</span> <span class="s">&quot;1&quot;</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s">&#39;ascii&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__telnetsession</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">telnetstring</span> <span class="o">+</span> <span class="n">b</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+        <span class="c"># select AU-D as output unit</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__telnetsession</span><span class="o">.</span><span class="n">read_until</span><span class="p">(</span><span class="n">b</span><span class="s">&quot;] : &quot;</span><span class="p">)</span>
+        <span class="n">telnetstring</span> <span class="o">=</span> <span class="s">&quot;2&quot;</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s">&#39;ascii&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__telnetsession</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">telnetstring</span> <span class="o">+</span> <span class="n">b</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+        <span class="c"># select Spreadsheet CSV format</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__telnetsession</span><span class="o">.</span><span class="n">read_until</span><span class="p">(</span><span class="n">b</span><span class="s">&quot;] : &quot;</span><span class="p">)</span>
+        <span class="n">telnetstring</span> <span class="o">=</span> <span class="s">&quot;YES&quot;</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s">&#39;ascii&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__telnetsession</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">telnetstring</span> <span class="o">+</span> <span class="n">b</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+        <span class="c"># Label cartesian output</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__telnetsession</span><span class="o">.</span><span class="n">read_until</span><span class="p">(</span><span class="n">b</span><span class="s">&quot;] : &quot;</span><span class="p">)</span>
+        <span class="n">telnetstring</span> <span class="o">=</span> <span class="s">&quot;YES&quot;</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s">&#39;ascii&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__telnetsession</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">telnetstring</span> <span class="o">+</span> <span class="n">b</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+        <span class="c"># select only position components {x,y,z}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__telnetsession</span><span class="o">.</span><span class="n">read_until</span><span class="p">(</span><span class="n">b</span><span class="s">&quot;] : &quot;</span><span class="p">)</span>
+        <span class="n">telnetstring</span> <span class="o">=</span> <span class="s">&quot;1&quot;</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s">&#39;ascii&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__telnetsession</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">telnetstring</span> <span class="o">+</span> <span class="n">b</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+        <span class="c"># read stuff between $$SOE and $$EOE</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__telnetsession</span><span class="o">.</span><span class="n">read_until</span><span class="p">(</span><span class="n">b</span><span class="s">&quot;$$SOE&quot;</span><span class="p">)</span>
+        <span class="n">sessioncontent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__telnetsession</span><span class="o">.</span><span class="n">read_until</span><span class="p">(</span><span class="n">b</span><span class="s">&quot;$$EOE&quot;</span><span class="p">)</span>
+        <span class="c"># chunk the session content into lines again</span>
+        <span class="n">datalines</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">sessioncontent</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\\</span><span class="s">r</span><span class="se">\\</span><span class="s">n&quot;</span><span class="p">)</span>
+        <span class="c"># remove $$SOE &amp; $$EOE part</span>
+        <span class="k">del</span> <span class="n">datalines</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">del</span> <span class="n">datalines</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">datalines</span><span class="p">:</span>
+            <span class="n">fields</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&quot;,&quot;</span><span class="p">)</span>
+            <span class="c"># put all the thing in the data to be returned</span>
+            <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span>
+                    <span class="n">date</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">convert_NASA_to_ISO_datestring</span><span class="p">(</span><span class="n">fields</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()),</span>
+                    <span class="n">x</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">fields</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()),</span>
+                    <span class="n">y</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">fields</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()),</span>
+                    <span class="n">z</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">fields</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">())))</span>
+        <span class="c"># fake test data</span>
+        <span class="c"># data = [{&#39;x&#39;: 23}, {&#39;y&#39;: 42}]</span>
+        <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+<span class="c"># only call if script is executed (and not included) for debugging</span></div></div>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">foo</span> <span class="o">=</span> <span class="n">NASAhorizons</span><span class="p">()</span>
+    <span class="n">foo</span><span class="o">.</span><span class="n">set_object_id</span><span class="p">(</span><span class="mi">199</span><span class="p">)</span>
+    <span class="n">start</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">(</span><span class="n">year</span><span class="o">=</span><span class="mi">1977</span><span class="p">,</span> <span class="n">month</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span> <span class="n">day</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+    <span class="n">end</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">(</span><span class="n">year</span><span class="o">=</span><span class="mi">1977</span><span class="p">,</span> <span class="n">month</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span> <span class="n">day</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">foo</span><span class="o">.</span><span class="n">get_data</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">))</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">py-NASA-horizon 0.1 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, tpltnt.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>
