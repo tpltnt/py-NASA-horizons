@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+"""A python 3 wrapper/interface to the NASA HORIZONS data service.
+
+.. moduleauthor:: tpltnt
+
+"""
+
 import datetime
 import json
 import socket
@@ -20,7 +26,8 @@ class NASAhorizons(object):
 
     def create_session(self):
         """Creates a new telnet connection to the NASA HORIZONS data service.
-        Calling this method *will destroy* your old connection."""
+        Calling this method *will destroy* your old connection.
+        """
 
         host = "horizons.jpl.nasa.gov"
         port = 6775
@@ -32,7 +39,13 @@ class NASAhorizons(object):
             raise IOError("socket timed out")
 
     def has_session(self):
-        """A simple self test if a session already exits."""
+        """A simple self test if a session already exits.
+
+        >>> nasa = NASAhorizons()
+        >>> nasa.create_session()
+        >>> nasa.has_session()
+        True
+        """
         if None == self.__telnetsession:
             return False
         else:
@@ -47,7 +60,8 @@ class NASAhorizons(object):
     def set_object_id(self, idnumber):
         """Select object by its HORIZON internal ID number.
         Note that these are *not* the IAU or designation numbers.
-        Negative values indicate spacecrafts."""
+        Negative values indicate spacecrafts.
+        """
         # -31 = Voyager I (test object)
         if not isinstance(idnumber, int):
             raise TypeError("ID numbers need to be integers.")
@@ -56,6 +70,10 @@ class NASAhorizons(object):
     def convert_to_NASA_date(self, dateobject):
         """convert given datetime.date-object to string in NASA format,
         e.g. 1977-Sep-10
+
+        .. todo::
+        
+           refactor date handling (datetime.date is insufficient)
         """
         if not isinstance(dateobject, datetime.date):
             raise TypeError("given date has to be datetime.date-object")
