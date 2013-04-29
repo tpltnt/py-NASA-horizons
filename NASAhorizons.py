@@ -212,8 +212,7 @@ class NASAhorizons(object):
             fields = line.split(",")
             # put all the thing in the data to be returned
             data.append(dict(
-                    date = self.convert_NASA_to_ISO_datestring(
-                        fields[1].strip()),
+                    date = self.convert_NASA_to_ISO_datestring(fields[1].strip()),
                     x = float(fields[2].strip()),
                     y = float(fields[3].strip()),
                     z = float(fields[4].strip())))
