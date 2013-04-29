@@ -4,31 +4,32 @@ import json
 import socket
 import telnetlib
 
+
 class NASAhorizons(object):
     """A python wrapper for the NASA HORIZONS data service telnet interface
-    to query xyz-coordinates of objects. It uses the ICRF/J2000.0 reference frame.
+    to query xyz-coordinates of objects. It uses the ICRF/J2000.0 reference
+    frame.
     """
 
     __referenceframe = "J2000"
     __objectid = None       # horizon interal object id to query
     __telnetsession = None
+
     def __init__(self):
         self.create_session()
-
 
     def create_session(self):
         """Creates a new telnet connection to the NASA HORIZONS data service.
         Calling this method *will destroy* your old connection."""
-        
-        host    = "horizons.jpl.nasa.gov"
-        port    = 6775
+
+        host = "horizons.jpl.nasa.gov"
+        port = 6775
         timeout = 9999
 
         try:
             self.__telnetsession = telnetlib.Telnet(host, port, timeout)
         except socket.timeout:
             raise IOError("socket timed out")
-
 
     def has_session(self):
         """A simple self test if a session already exits."""
@@ -37,23 +38,20 @@ class NASAhorizons(object):
         else:
             return True
 
-
     def close_session(self):
         """Explictly close the session."""
         self.__telnetsession.write(b"exit\n")
         self.__telnetsession.close()
         self.__telnetsession = None
 
-
-    def set_object_id(self,idnumber):
+    def set_object_id(self, idnumber):
         """Select object by its HORIZON internal ID number.
         Note that these are *not* the IAU or designation numbers.
         Negative values indicate spacecrafts."""
         # -31 = Voyager I (test object)
-        if not isinstance(idnumber,int):
+        if not isinstance(idnumber, int):
             raise TypeError("ID numbers need to be integers.")
         self.__objectid = idnumber
-
 
     def convert_to_NASA_date(self, dateobject):
         """convert given datetime.date-object to string in NASA format,
@@ -98,12 +96,11 @@ class NASAhorizons(object):
 
         return datestring
 
-
     def convert_NASA_to_ISO_datestring(self, nasadate):
         """Convert a NASA string to an ISO 8601 like format. The
         time is in Barycentric Dynamical Time."""
 
-        if not isinstance(nasadate,str):
+        if not isinstance(nasadate, str):
             raise TypeError("i want to eat strings, nothing else ... nom nom nom")
         # example: "A.D. 1977-Sep-10 00:00:00.0000"
         # AD vs BC
@@ -126,19 +123,18 @@ class NASAhorizons(object):
         datechunk = datechunk.replace(" ", "T")
         return datechunk
 
-
-    def get_data(self,start,end):
-        """Retrieve data (xyz-coordinates) from pre-defined context.
-        Right know fixed to Voyager I.
+    def get_data(self, start, end):
+        """Retrieve data (xyz-coordinates) for formerly
+        set object.
 
         arguments:
         * start: datetime.date indicating first datapoint to be requested
         * end: datetime.date indicating last datapoint to be requested
         """
         # TODO: check for data context
-        if not isinstance(start,datetime.date):
+        if not isinstance(start, datetime.date):
             raise TypeError("start has to be a datetime.date-object")
-        if not isinstance(end,datetime.date):
+        if not isinstance(end, datetime.date):
             raise TypeError("end has to be a datetime.date-object")
         if not self.has_session():
             self.create_session()
@@ -175,7 +171,7 @@ class NASAhorizons(object):
         self.__telnetsession.read_until(b"] : ")
         telnetstring = "1d".encode('ascii')
         self.__telnetsession.write(telnetstring + b"\n")
-        # change output defaults 
+        # change output defaults
         self.__telnetsession.read_until(b"[ cr=(y), n, ?] : ")
         telnetstring = "n".encode('ascii')
         self.__telnetsession.write(telnetstring + b"\n")
@@ -216,11 +212,11 @@ class NASAhorizons(object):
             fields = line.split(",")
             # put all the thing in the data to be returned
             data.append(dict(
-                    date = self.convert_NASA_to_ISO_datestring(fields[1].strip()),
+                    date = self.convert_NASA_to_ISO_datestring(
+                        fields[1].strip()),
                     x = float(fields[2].strip()),
                     y = float(fields[3].strip()),
-                    z = float(fields[4].strip())
-                    ))
+                    z = float(fields[4].strip())))
         # fake test data
         # data = [{'x': 23}, {'y': 42}]
         return json.dumps(data)
