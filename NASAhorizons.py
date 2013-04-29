@@ -102,13 +102,15 @@ class NASAhorizons(object):
 
 
     def convert_NASA_to_ISO_datestring(self, nasadate):
-        """Convert a NASA string to ISO format. Right now it only
-        converts dates, not complete timestamps"""
+        """Convert a NASA string to an ISO 8601 like format. The
+        time is in Barycentric Dynamical Time."""
+
         if not isinstance(nasadate,str):
             raise TypeError("i want to eat strings, nothing else ... nom nom nom")
-        # "A.D. 1977-Sep-10 00:00:00.0000"
+        # example: "A.D. 1977-Sep-10 00:00:00.0000"
+        # AD vs BC
         datechunk = nasadate.replace("A.D. ", "")
-        datechunk = datechunk.replace(" 00:00:00.0000", "")
+        datechunk = datechunk.replace("B.C. ", "-")
         # crude reverse month cascade
         datechunk = datechunk.replace("Jan", "01")
         datechunk = datechunk.replace("Feb", "02")
@@ -122,7 +124,8 @@ class NASAhorizons(object):
         datechunk = datechunk.replace("Oct", "10")
         datechunk = datechunk.replace("Nov", "11")
         datechunk = datechunk.replace("Dez", "12")
-
+        # split date from time
+        datechunk = datechunk.replace(" ", "T")
         return datechunk
 
 
