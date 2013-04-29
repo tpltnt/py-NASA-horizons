@@ -23,4 +23,5 @@ references
 * [YAML specification](http://yaml.org/spec/)
 * [PyYAML](https://bitbucket.org/xi/pyyaml)
 * [United States Naval Observatory Circular 179 : The IAU Resolutions on Astronomical Reference Systems, Time Scales, and Earth Rotation Models Explanation and Implementation (pdf)](http://aa.usno.navy.mil/publications/docs/Circular_179.pdf)
+* [reStructuredText documentation](http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html)
 * [pytest testing framework](http://www.pytest.org)
