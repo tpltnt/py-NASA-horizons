@@ -10,6 +10,7 @@ quickstart
 ----------
 
 * run tests by typing ```py.test```
+* (re)build documentation by running ```cd documentation && make html```
 
 TODO
 ----
@@ -30,3 +31,4 @@ references
 * [United States Naval Observatory Circular 179 : The IAU Resolutions on Astronomical Reference Systems, Time Scales, and Earth Rotation Models Explanation and Implementation (pdf)](http://aa.usno.navy.mil/publications/docs/Circular_179.pdf)
 * [reStructuredText documentation](http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html)
 * [pytest testing framework](http://www.pytest.org)
+* [sphinx documentation generator](http://sphinx-doc.org/)
