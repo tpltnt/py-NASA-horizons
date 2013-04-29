@@ -9,10 +9,8 @@ retrieve data from it.
 
 TODO:
 
-* check convert_to_NASA_date() for completely correct conversation
-* create query-context
 * handle telnet errors
-* expand convert_NASA_to_ISO_date() to work with complete timestamps
+* refactor date handling
 
 references
 ==========
