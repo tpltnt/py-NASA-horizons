@@ -148,7 +148,7 @@ for dataset in allobjects:
         rstfile.write(" ")
     rstfile.write(" | ")
     rstfile.write(str(dataset['name']))
-    for i in range(maxid - len(str(dataset['name']))):
+    for i in range(maxname - len(str(dataset['name']))):
         rstfile.write(" ")
     rstfile.write(" | ")    
     rstfile.write(str(dataset['designation']))
