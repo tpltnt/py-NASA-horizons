@@ -11,11 +11,9 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
-.. automodule:: NASAhorizons
- 
-.. autoclass:: NASAhorizons
-    :members: 
+   code
 
+.. automodule:: NASAhorizons
 
 Indices and tables
 ==================

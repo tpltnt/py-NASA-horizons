@@ -56,7 +56,7 @@
 <span class="kn">import</span> <span class="nn">telnetlib</span>
 
 
-<div class="viewcode-block" id="NASAhorizons"><a class="viewcode-back" href="../index.html#NASAhorizons.NASAhorizons">[docs]</a><span class="k">class</span> <span class="nc">NASAhorizons</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="NASAhorizons"><a class="viewcode-back" href="../code.html#NASAhorizons.NASAhorizons">[docs]</a><span class="k">class</span> <span class="nc">NASAhorizons</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;A python wrapper for the NASA HORIZONS data service telnet interface</span>
 <span class="sd">    to query xyz-coordinates of objects. It uses the ICRF/J2000.0 reference</span>
 <span class="sd">    frame.</span>
@@ -69,7 +69,7 @@
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">create_session</span><span class="p">()</span>
 
-<div class="viewcode-block" id="NASAhorizons.create_session"><a class="viewcode-back" href="../index.html#NASAhorizons.NASAhorizons.create_session">[docs]</a>    <span class="k">def</span> <span class="nf">create_session</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="NASAhorizons.create_session"><a class="viewcode-back" href="../code.html#NASAhorizons.NASAhorizons.create_session">[docs]</a>    <span class="k">def</span> <span class="nf">create_session</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Creates a new telnet connection to the NASA HORIZONS data service.</span>
 <span class="sd">        Calling this method *will destroy* your old connection.&quot;&quot;&quot;</span>
 
@@ -82,20 +82,20 @@
         <span class="k">except</span> <span class="n">socket</span><span class="o">.</span><span class="n">timeout</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s">&quot;socket timed out&quot;</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="NASAhorizons.has_session"><a class="viewcode-back" href="../index.html#NASAhorizons.NASAhorizons.has_session">[docs]</a>    <span class="k">def</span> <span class="nf">has_session</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="NASAhorizons.has_session"><a class="viewcode-back" href="../code.html#NASAhorizons.NASAhorizons.has_session">[docs]</a>    <span class="k">def</span> <span class="nf">has_session</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;A simple self test if a session already exits.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">None</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">__telnetsession</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">False</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">True</span>
 </div>
-<div class="viewcode-block" id="NASAhorizons.close_session"><a class="viewcode-back" href="../index.html#NASAhorizons.NASAhorizons.close_session">[docs]</a>    <span class="k">def</span> <span class="nf">close_session</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="NASAhorizons.close_session"><a class="viewcode-back" href="../code.html#NASAhorizons.NASAhorizons.close_session">[docs]</a>    <span class="k">def</span> <span class="nf">close_session</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Explictly close the session.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__telnetsession</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">b</span><span class="s">&quot;exit</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__telnetsession</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__telnetsession</span> <span class="o">=</span> <span class="bp">None</span>
 </div>
-<div class="viewcode-block" id="NASAhorizons.set_object_id"><a class="viewcode-back" href="../index.html#NASAhorizons.NASAhorizons.set_object_id">[docs]</a>    <span class="k">def</span> <span class="nf">set_object_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idnumber</span><span class="p">):</span>
+<div class="viewcode-block" id="NASAhorizons.set_object_id"><a class="viewcode-back" href="../code.html#NASAhorizons.NASAhorizons.set_object_id">[docs]</a>    <span class="k">def</span> <span class="nf">set_object_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idnumber</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Select object by its HORIZON internal ID number.</span>
 <span class="sd">        Note that these are *not* the IAU or designation numbers.</span>
 <span class="sd">        Negative values indicate spacecrafts.&quot;&quot;&quot;</span>
@@ -104,7 +104,7 @@
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;ID numbers need to be integers.&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__objectid</span> <span class="o">=</span> <span class="n">idnumber</span>
 </div>
-<div class="viewcode-block" id="NASAhorizons.convert_to_NASA_date"><a class="viewcode-back" href="../index.html#NASAhorizons.NASAhorizons.convert_to_NASA_date">[docs]</a>    <span class="k">def</span> <span class="nf">convert_to_NASA_date</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dateobject</span><span class="p">):</span>
+<div class="viewcode-block" id="NASAhorizons.convert_to_NASA_date"><a class="viewcode-back" href="../code.html#NASAhorizons.NASAhorizons.convert_to_NASA_date">[docs]</a>    <span class="k">def</span> <span class="nf">convert_to_NASA_date</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dateobject</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;convert given datetime.date-object to string in NASA format,</span>
 <span class="sd">        e.g. 1977-Sep-10</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -147,7 +147,7 @@
 
         <span class="k">return</span> <span class="n">datestring</span>
 </div>
-<div class="viewcode-block" id="NASAhorizons.convert_NASA_to_ISO_datestring"><a class="viewcode-back" href="../index.html#NASAhorizons.NASAhorizons.convert_NASA_to_ISO_datestring">[docs]</a>    <span class="k">def</span> <span class="nf">convert_NASA_to_ISO_datestring</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nasadate</span><span class="p">):</span>
+<div class="viewcode-block" id="NASAhorizons.convert_NASA_to_ISO_datestring"><a class="viewcode-back" href="../code.html#NASAhorizons.NASAhorizons.convert_NASA_to_ISO_datestring">[docs]</a>    <span class="k">def</span> <span class="nf">convert_NASA_to_ISO_datestring</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nasadate</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Convert a NASA string to an ISO 8601 like format. The</span>
 <span class="sd">        time is in Barycentric Dynamical Time.&quot;&quot;&quot;</span>
 
@@ -174,7 +174,7 @@
         <span class="n">datechunk</span> <span class="o">=</span> <span class="n">datechunk</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&quot; &quot;</span><span class="p">,</span> <span class="s">&quot;T&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">datechunk</span>
 </div>
-<div class="viewcode-block" id="NASAhorizons.get_data"><a class="viewcode-back" href="../index.html#NASAhorizons.NASAhorizons.get_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">):</span>
+<div class="viewcode-block" id="NASAhorizons.get_data"><a class="viewcode-back" href="../code.html#NASAhorizons.NASAhorizons.get_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Retrieve data (xyz-coordinates) for formerly</span>
 <span class="sd">        set object.</span>
 

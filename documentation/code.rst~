@@ -1,0 +1,4 @@
+.. automodule:: NASAhorizons
+ 
+.. autoclass:: NASAhorizons
+    :members:
