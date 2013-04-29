@@ -123,5 +123,32 @@ rstfile.write("+")
 for i in range(maxother+2):
     rstfile.write("=")
 rstfile.write("+\n")
+#### data rows
+for dataset in allobjects:
+    # data
+    rstfile.write("| ")
+    rstfile.write(str(dataset['idnumber']))
+    for i in range(maxid - len(str(dataset['idnumber']))):
+        rstfile.write(" ")
+    rstfile.write(" | ")
+    rstfile.write(str(dataset['designation']))
+    for i in range(maxdes - len(str(dataset['designation']))):
+        rstfile.write(" ")
+    rstfile.write(" | ")
+    rstfile.write(str(dataset['other']))
+    for i in range(maxother - len(str(dataset['other']))):
+        rstfile.write(" ")
+    rstfile.write(" |\n")
+    # bottom line
+    rstfile.write("+")
+    for i in range(maxid+2):
+        rstfile.write("-")
+    rstfile.write("+")
+    for i in range(maxdes+2):
+        rstfile.write("-")
+    rstfile.write("+")
+    for i in range(maxother+2):
+        rstfile.write("-")
+    rstfile.write("+\n")
 
 rstfile.close()
