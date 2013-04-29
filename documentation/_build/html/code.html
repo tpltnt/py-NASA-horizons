@@ -26,6 +26,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="top" title="py-NASA-horizon 0.1 documentation" href="index.html" />
+    <link rel="next" title="Major Bodies Overview" href="major_body_sheet.html" />
     <link rel="prev" title="Welcome to py-NASA-horizon’s documentation!" href="index.html" /> 
   </head>
   <body>
@@ -38,6 +39,9 @@
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="major_body_sheet.html" title="Major Bodies Overview"
+             accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="index.html" title="Welcome to py-NASA-horizon’s documentation!"
              accesskey="P">previous</a> |</li>
@@ -52,13 +56,14 @@
             
   <div class="section" id="module-NASAhorizons">
 <span id="nasahorizons-overview"></span><h1>NASAHorizons overview<a class="headerlink" href="#module-NASAhorizons" title="Permalink to this headline">¶</a></h1>
-<p>A python 3 wrapper/interface to the NASA HORIZONS data service.</p>
+<p>A pure python 3 wrapper for the <a class="reference external" href="http://ssd.jpl.nasa.gov/?horizons">NASA HORIZONS</a>
+data service.</p>
 <dl class="class">
 <dt id="NASAhorizons.NASAhorizons">
 <em class="property">class </em><tt class="descclassname">NASAhorizons.</tt><tt class="descname">NASAhorizons</tt><a class="reference internal" href="_modules/NASAhorizons.html#NASAhorizons"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NASAhorizons.NASAhorizons" title="Permalink to this definition">¶</a></dt>
-<dd><p>A python wrapper for the NASA HORIZONS data service telnet interface
-to query xyz-coordinates of objects. It uses the ICRF/J2000.0 reference
-frame.</p>
+<dd><p>A python wrapper for the <a class="reference external" href="http://ssd.jpl.nasa.gov/?horizons">NASA HORIZONS</a> 
+data service telnet interface to query xyz-coordinates of objects.
+It uses the ICRF/J2000.0 reference frame.</p>
 <dl class="method">
 <dt id="NASAhorizons.NASAhorizons.close_session">
 <tt class="descname">close_session</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/NASAhorizons.html#NASAhorizons.close_session"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NASAhorizons.NASAhorizons.close_session" title="Permalink to this definition">¶</a></dt>
@@ -68,15 +73,51 @@ frame.</p>
 <dl class="method">
 <dt id="NASAhorizons.NASAhorizons.convert_NASA_to_ISO_datestring">
 <tt class="descname">convert_NASA_to_ISO_datestring</tt><big>(</big><em>nasadate</em><big>)</big><a class="reference internal" href="_modules/NASAhorizons.html#NASAhorizons.convert_NASA_to_ISO_datestring"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NASAhorizons.NASAhorizons.convert_NASA_to_ISO_datestring" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convert a NASA string to an ISO 8601 like format. The
-time is in Barycentric Dynamical Time.</p>
+<dd><p>Convert a NASA string to an <a class="reference external" href="http://de.wikipedia.org/wiki/ISO_8601">ISO 8601</a>
+like format. The time is in
+<a class="reference external" href="http://en.wikipedia.org/wiki/Barycentric_Dynamical_Time">Barycentric Dynamical Time</a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>nasadate</strong> (<em>str</em>) &#8211; NASA date string</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">str in ISO-like format</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises :</th><td class="field-body">TypeError</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">convert_NASA_to_ISO_datestring</span><span class="p">(</span><span class="s">&quot;A.D. 1977-Sep-10 00:00:00.0000&quot;</span><span class="p">)</span>
+<span class="go">1977-09-10T00:00:00.0000</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">convert_NASA_to_ISO_datestring</span><span class="p">(</span><span class="s">&quot;B.C. 1977-Sep-10 23:10:00.0000&quot;</span><span class="p">)</span>
+<span class="go">-1977-09-10T23:10:00.0000</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="method">
 <dt id="NASAhorizons.NASAhorizons.convert_to_NASA_date">
 <tt class="descname">convert_to_NASA_date</tt><big>(</big><em>dateobject</em><big>)</big><a class="reference internal" href="_modules/NASAhorizons.html#NASAhorizons.convert_to_NASA_date"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NASAhorizons.NASAhorizons.convert_to_NASA_date" title="Permalink to this definition">¶</a></dt>
-<dd><p>convert given datetime.date-object to string in NASA format,
-e.g. 1977-Sep-10</p>
+<dd><p>Convert a given datetime.date-object to a string in NASA format.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>dateobject</strong> (<em>datetime.date</em>) &#8211; date to convert</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">str &#8211; date in NASA format</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises :</th><td class="field-body">TypeError</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">datetime</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">test</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">(</span><span class="n">year</span><span class="o">=</span><span class="mi">1977</span><span class="p">,</span> <span class="n">month</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span> <span class="n">day</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">convert_to_NASA_date</span><span class="p">(</span><span class="n">test</span><span class="p">)</span>
+<span class="go">1977-Sep-10</span>
+</pre></div>
+</div>
 <div class="admonition-todo admonition" id="index-0">
 <p class="first last admonition-title">Todo</p>
 </div>
@@ -90,22 +131,62 @@ e.g. 1977-Sep-10</p>
 <tt class="descname">create_session</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/NASAhorizons.html#NASAhorizons.create_session"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NASAhorizons.NASAhorizons.create_session" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a new telnet connection to the NASA HORIZONS data service.
 Calling this method <em>will destroy</em> your old connection.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Raises :</th><td class="field-body">IOError</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="NASAhorizons.NASAhorizons.get_data">
-<tt class="descname">get_data</tt><big>(</big><em>start</em>, <em>end</em><big>)</big><a class="reference internal" href="_modules/NASAhorizons.html#NASAhorizons.get_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NASAhorizons.NASAhorizons.get_data" title="Permalink to this definition">¶</a></dt>
-<dd><p>Retrieve data (xyz-coordinates) for formerly
-set object.</p>
-<p>arguments:
-* start: datetime.date indicating first datapoint to be requested
-* end: datetime.date indicating last datapoint to be requested</p>
+<tt class="descname">get_data</tt><big>(</big><em>start</em>, <em>end</em>, <em>format='list'</em><big>)</big><a class="reference internal" href="_modules/NASAhorizons.html#NASAhorizons.get_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NASAhorizons.NASAhorizons.get_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve data (xyz-coordinates) for formerly selected object.
+A session will be initialized in the background if needed.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>start</strong> (<em>datetime.date</em>) &#8211; date of first datapoint to be requested</li>
+<li><strong>end</strong> (<em>datetime.date</em>) &#8211; date of last datapoint to be requested</li>
+<li><strong>format</strong> (str &#8211; &#8220;list&#8221; (of dictionaires (default)) or &#8220;<a class="reference external" href="http://json.org/">json</a>&#8220;) &#8211; format of returned data</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">data in selected format</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises :</th><td class="field-body"><p class="first last">TypeError</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">nasa</span> <span class="o">=</span> <span class="n">NASAhorizons</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nasa</span><span class="o">.</span><span class="n">set_object_id</span><span class="p">(</span><span class="mi">199</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">start</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">(</span><span class="n">year</span><span class="o">=</span><span class="mi">1977</span><span class="p">,</span> <span class="n">month</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span> <span class="n">day</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">end</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">(</span><span class="n">year</span><span class="o">=</span><span class="mi">1977</span><span class="p">,</span> <span class="n">month</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span> <span class="n">day</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nasa</span><span class="o">.</span><span class="n">get_data</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">format</span><span class="o">=</span><span class="s">&quot;list&quot;</span><span class="p">)</span>
+<span class="go">[{&#39;z&#39;: -0.02967482538878673, &#39;y&#39;: 0.02365967857453419, &#39;x&#39;: 0.3497488933057855, &#39;date&#39;: &#39;1977-09-10T00:00:00.0000&#39;}, {&#39;z&#39;: -0.02647449350730847, &#39;y&#39;: 0.05283430192085586, &#39;x&#39;: 0.3408485768468899, &#39;date&#39;: &#39;1977-09-11T00:00:00.0000&#39;}, {&#39;z&#39;: -0.02308289285966815, &#39;y&#39;: 0.08159238988582097, &#39;x&#39;: 0.3294953295232826, &#39;date&#39;: &#39;1977-09-12T00:00:00.0000&#39;}]</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="method">
 <dt id="NASAhorizons.NASAhorizons.has_session">
 <tt class="descname">has_session</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/NASAhorizons.html#NASAhorizons.has_session"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NASAhorizons.NASAhorizons.has_session" title="Permalink to this definition">¶</a></dt>
 <dd><p>A simple self test if a session already exits.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">nasa</span> <span class="o">=</span> <span class="n">NASAhorizons</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">nasa</span><span class="o">.</span><span class="n">create_session</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">nasa</span><span class="o">.</span><span class="n">has_session</span><span class="p">()</span>
@@ -117,9 +198,19 @@ set object.</p>
 <dl class="method">
 <dt id="NASAhorizons.NASAhorizons.set_object_id">
 <tt class="descname">set_object_id</tt><big>(</big><em>idnumber</em><big>)</big><a class="reference internal" href="_modules/NASAhorizons.html#NASAhorizons.set_object_id"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NASAhorizons.NASAhorizons.set_object_id" title="Permalink to this definition">¶</a></dt>
-<dd><p>Select object by its HORIZON internal ID number.
+<dd><p>Select object by its HORIZONS internal ID number.
 Note that these are <em>not</em> the IAU or designation numbers.
 Negative values indicate spacecrafts.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>idnumber</strong> (<em>int</em>) &#8211; HORIZONS-internal ID number, see <a class="reference internal" href="major_body_sheet.html"><em>Major Bodies Overview</em></a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises :</th><td class="field-body">TypeError</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -135,6 +226,9 @@ Negative values indicate spacecrafts.</p>
   <h4>Previous topic</h4>
   <p class="topless"><a href="index.html"
                         title="previous chapter">Welcome to py-NASA-horizon&#8217;s documentation!</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="major_body_sheet.html"
+                        title="next chapter">Major Bodies Overview</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/code.txt"
@@ -166,6 +260,9 @@ Negative values indicate spacecrafts.</p>
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="major_body_sheet.html" title="Major Bodies Overview"
+             >next</a> |</li>
         <li class="right" >
           <a href="index.html" title="Welcome to py-NASA-horizon’s documentation!"
              >previous</a> |</li>
