@@ -5,8 +5,11 @@ import socket
 import telnetlib
 
 class NASAhorizons(object):
-    """a python wrapper for the NASA HORIZONS data service telnet interface"""
+    """A python wrapper for the NASA HORIZONS data service telnet interface
+    to query xyz-coordinates of objects. It uses the J2000 reference frame.
+    """
 
+    __referenceframe = "J2000"
     __objectid = None       # horizon interal object id to query
     __telnetsession = None
     def __init__(self):
