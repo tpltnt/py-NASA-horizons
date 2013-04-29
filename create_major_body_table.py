@@ -10,7 +10,7 @@ host    = "horizons.jpl.nasa.gov"
 port    = 6775
 timeout = 9999
 telnetsession = None
-headings = ["ID number", "designation","IAU/other"] # for final table
+headings = ["ID number", "name", "designation","IAU/other"] # for final table
 
 try:
     telnetsession = telnetlib.Telnet(host, port, timeout)
@@ -59,6 +59,7 @@ for line in datalines:
     if "" == other:
         other = None
     dataset = dict(idnumber=idnumber,
+                   name=name,
                    designation=designation,
                    other=other)
     allobjects.append(dataset)
@@ -66,11 +67,14 @@ for line in datalines:
 # create rst-file with table
 ## determine max cell width
 maxid = 0
+maxname = 0
 maxdes = 0
 maxother = 0
 for dataset in allobjects:
     if maxid < len(str(dataset['idnumber'])):
         maxid = len(str(dataset['idnumber']))
+    if maxname < len(str(dataset['name'])):
+        maxname = len(str(dataset['name']))
     if maxdes < len(str(dataset['designation'])):
         maxdes = len(str(dataset['designation']))
     if maxother < len(str(dataset['other'])):
@@ -78,10 +82,12 @@ for dataset in allobjects:
 ### also take heading into account
 if maxid < len(headings[0]):
     maxid = len(headings[0])
-if maxdes < len(headings[1]):
-    maxdes = len(headings[1])
-if maxother < len(headings[2]):
-    maxother = len(headings[2])
+if maxname < len(headings[1]):
+    maxname = len(headings[1])
+if maxdes < len(headings[2]):
+    maxdes = len(headings[2])
+if maxother < len(headings[3]):
+    maxother = len(headings[3])
 
 ## flush out the data
 rstfile = open('major_body_sheet.rst','w')
@@ -90,6 +96,9 @@ rstfile = open('major_body_sheet.rst','w')
 #### top line
 rstfile.write("+")
 for i in range(maxid+2):
+    rstfile.write("-")
+rstfile.write("+")
+for i in range(maxname+2):
     rstfile.write("-")
 rstfile.write("+")
 for i in range(maxdes+2):
@@ -105,16 +114,23 @@ for i in range(maxid - len(headings[0])):
     rstfile.write(" ")
 rstfile.write(" | ")
 rstfile.write(headings[1])
-for i in range(maxdes - len(headings[1])):
+for i in range(maxname - len(headings[1])):
     rstfile.write(" ")
 rstfile.write(" | ")
 rstfile.write(headings[2])
-for i in range(maxother - len(headings[2])):
+for i in range(maxdes - len(headings[2])):
+    rstfile.write(" ")
+rstfile.write(" | ")
+rstfile.write(headings[3])
+for i in range(maxother - len(headings[3])):
     rstfile.write(" ")
 rstfile.write(" |\n")
 #### bottom line
 rstfile.write("+")
 for i in range(maxid+2):
+    rstfile.write("=")
+rstfile.write("+")
+for i in range(maxname+2):
     rstfile.write("=")
 rstfile.write("+")
 for i in range(maxdes+2):
@@ -131,6 +147,10 @@ for dataset in allobjects:
     for i in range(maxid - len(str(dataset['idnumber']))):
         rstfile.write(" ")
     rstfile.write(" | ")
+    rstfile.write(str(dataset['name']))
+    for i in range(maxid - len(str(dataset['name']))):
+        rstfile.write(" ")
+    rstfile.write(" | ")    
     rstfile.write(str(dataset['designation']))
     for i in range(maxdes - len(str(dataset['designation']))):
         rstfile.write(" ")
@@ -142,6 +162,9 @@ for dataset in allobjects:
     # bottom line
     rstfile.write("+")
     for i in range(maxid+2):
+        rstfile.write("-")
+    rstfile.write("+")
+    for i in range(maxname+2):
         rstfile.write("-")
     rstfile.write("+")
     for i in range(maxdes+2):
