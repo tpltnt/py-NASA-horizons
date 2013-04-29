@@ -70,11 +70,11 @@ class NASAhorizons(object):
 
     def set_object_id(self, idnumber):
         """
-        Select object by its HORIZON internal ID number.
+        Select object by its HORIZONS internal ID number.
         Note that these are *not* the IAU or designation numbers.
         Negative values indicate spacecrafts.
 
-        :param idnumber: horizon-internal ID number, see :doc:`major_body_sheet`
+        :param idnumber: HORIZONS-internal ID number, see :doc:`major_body_sheet`
         :type idnumber: int
         :raises: TypeError
         """
@@ -83,8 +83,18 @@ class NASAhorizons(object):
         self.__objectid = idnumber
 
     def convert_to_NASA_date(self, dateobject):
-        """convert given datetime.date-object to string in NASA format,
-        e.g. 1977-Sep-10
+        """
+        Convert a given datetime.date-object to a string in NASA format.
+
+        :param dateobject: date to convert
+        :type dateobject: datetime.date
+        :returns: str -- date in NASA format
+        :raises: TypeError
+
+        >>> import datetime
+        >>> test = datetime.date(year=1977, month=9, day=10)
+        >>> convert_to_NASA_date(test)
+        1977-Sep-10
 
         .. todo::
 
@@ -130,12 +140,24 @@ class NASAhorizons(object):
         return datestring
 
     def convert_NASA_to_ISO_datestring(self, nasadate):
-        """Convert a NASA string to an ISO 8601 like format. The
-        time is in Barycentric Dynamical Time."""
+        """
+        Convert a NASA string to an `ISO 8601 <http://de.wikipedia.org/wiki/ISO_8601>`_
+        like format. The time is in
+        `Barycentric Dynamical Time <http://en.wikipedia.org/wiki/Barycentric_Dynamical_Time>`_.
+
+        :param nasadate: NASA date string
+        :type nasadate: str
+        :returns: str in ISO-like format
+        :raises: TypeError
+
+        >>> convert_NASA_to_ISO_datestring("A.D. 1977-Sep-10 00:00:00.0000")
+        1977-09-10T00:00:00.0000
+        >>> convert_NASA_to_ISO_datestring("B.C. 1977-Sep-10 23:10:00.0000")
+        -1977-09-10T23:10:00.0000
+        """
 
         if not isinstance(nasadate, str):
             raise TypeError("i want to eat strings, nothing else ... nom nom nom")
-        # example: "A.D. 1977-Sep-10 00:00:00.0000"
         # AD vs BC
         datechunk = nasadate.replace("A.D. ", "")
         datechunk = datechunk.replace("B.C. ", "-")
@@ -156,13 +178,26 @@ class NASAhorizons(object):
         datechunk = datechunk.replace(" ", "T")
         return datechunk
 
-    def get_data(self, start, end):
-        """Retrieve data (xyz-coordinates) for formerly
-        set object.
+    def get_data(self, start, end, format="list"):
+        """
+        Retrieve data (xyz-coordinates) for formerly selected object.
+        A session will be initialized in the background if needed.
 
-        arguments:
-        * start: datetime.date indicating first datapoint to be requested
-        * end: datetime.date indicating last datapoint to be requested
+        :param start: date of first datapoint to be requested
+        :type start: datetime.date
+        :param end: date of last datapoint to be requested
+        :type end: datetime.date
+        :param format: format of returned data
+        :type format: str -- "list" (of dictionaires (default)) or "`json <http://json.org/>`_"
+        :return: data in selected format
+        :raises: TypeError
+
+        >>> nasa = NASAhorizons()
+        >>> nasa.set_object_id(199)
+        >>> start = datetime.date(year=1977, month=9, day=10)
+        >>> end = datetime.date(year=1977, month=9, day=12)
+        >>> nasa.get_data(start, end, format="list")
+        [{'z': -0.02967482538878673, 'y': 0.02365967857453419, 'x': 0.3497488933057855, 'date': '1977-09-10T00:00:00.0000'}, {'z': -0.02647449350730847, 'y': 0.05283430192085586, 'x': 0.3408485768468899, 'date': '1977-09-11T00:00:00.0000'}, {'z': -0.02308289285966815, 'y': 0.08159238988582097, 'x': 0.3294953295232826, 'date': '1977-09-12T00:00:00.0000'}]
         """
         # TODO: check for data context
         if not isinstance(start, datetime.date):
@@ -249,6 +284,8 @@ class NASAhorizons(object):
                     x = float(fields[2].strip()),
                     y = float(fields[3].strip()),
                     z = float(fields[4].strip())))
-        # fake test data
-        # data = [{'x': 23}, {'y': 42}]
-        return json.dumps(data)
+        # finally return data
+        if "list" == format:
+            return data
+        if "json" == format:
+            return json.dumps(data)
