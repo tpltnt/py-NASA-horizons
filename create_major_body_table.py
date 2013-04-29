@@ -78,16 +78,16 @@ for dataset in allobjects:
 ### also take heading into account
 if maxid < len(headings[0]):
     maxid = len(headings[0])
-
 if maxdes < len(headings[1]):
     maxdes = len(headings[1])
-
 if maxother < len(headings[2]):
     maxother = len(headings[2])
 
 ## flush out the data
 rstfile = open('major_body_sheet.rst','w')
 
+### create heading
+#### top line
 rstfile.write("+")
 for i in range(maxid+2):
     rstfile.write("-")
@@ -97,6 +97,31 @@ for i in range(maxdes+2):
 rstfile.write("+")
 for i in range(maxother+2):
     rstfile.write("-")
+rstfile.write("+\n")
+#### text
+rstfile.write("| ")
+rstfile.write(headings[0])
+for i in range(maxid - len(headings[0])):
+    rstfile.write(" ")
+rstfile.write(" | ")
+rstfile.write(headings[1])
+for i in range(maxdes - len(headings[1])):
+    rstfile.write(" ")
+rstfile.write(" | ")
+rstfile.write(headings[2])
+for i in range(maxother - len(headings[2])):
+    rstfile.write(" ")
+rstfile.write(" |\n")
+#### bottom line
 rstfile.write("+")
+for i in range(maxid+2):
+    rstfile.write("=")
+rstfile.write("+")
+for i in range(maxdes+2):
+    rstfile.write("=")
+rstfile.write("+")
+for i in range(maxother+2):
+    rstfile.write("=")
+rstfile.write("+\n")
 
 rstfile.close()
