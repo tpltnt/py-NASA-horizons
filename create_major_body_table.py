@@ -91,7 +91,11 @@ if maxother < len(headings[3]):
 
 ## flush out the data
 rstfile = open('major_body_sheet.rst','w')
-
+rstfile.write("Major Bodies Overview\n")
+rstfile.write("=====================\n\n")
+rstfile.write("This page provides an overview over all major bodies where")
+rstfile.write("data is available. The ID number listed in the first column ")
+rstfile.write("is used to identify target objects in queries.\n\n")
 ### create heading
 #### top line
 rstfile.write("+")
