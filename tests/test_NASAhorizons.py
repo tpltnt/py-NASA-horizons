@@ -44,13 +44,6 @@ def test_set_object_id1():
         foo.set_object_id('-31')
 
 
-def test_set_object_id1000():
-    """temporary test to catch unfullfillable requests."""
-    foo = NASAhorizons()
-    with pytest.raises(NotImplementedError):
-        foo.set_object_id(23)
-
-
 def test_convert_to_NASA_date0():
     """test for accepting datetime.date objects"""
     foo = NASAhorizons()
