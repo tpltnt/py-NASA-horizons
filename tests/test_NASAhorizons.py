@@ -1,7 +1,7 @@
 import datetime
 import json
 import sys
-sys.path.append('../py-NASA-horizons')
+sys.path.append('../py-NASA-horizons/source')
 import pytest
 from NASAhorizons import NASAhorizons
 
