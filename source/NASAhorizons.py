@@ -2,7 +2,6 @@
 """A python 3 wrapper/interface to the NASA HORIZONS data service.
 
 .. moduleauthor:: tpltnt
-
 """
 
 import datetime
@@ -72,8 +71,8 @@ class NASAhorizons(object):
         e.g. 1977-Sep-10
 
         .. todo::
-        
-           refactor date handling (datetime.date is insufficient)
+
+        * refactor date handling (datetime.date is insufficient)
         """
         if not isinstance(dateobject, datetime.date):
             raise TypeError("given date has to be datetime.date-object")
