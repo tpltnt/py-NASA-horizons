@@ -58,6 +58,7 @@ for line in datalines:
     if "" == other:
         other = None
     dataset = dict(idnumber=idnumber,
+                   name=name,
                    designation=designation,
                    other=other)
     allobjects.append(dataset)
