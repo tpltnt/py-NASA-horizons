@@ -33,3 +33,10 @@ nosetests.xml
 .mr.developer.cfg
 .project
 .pydevproject
+
+# emacs
+*~
+\#*\#
+.elc
+auto-save-list
+.\#*
