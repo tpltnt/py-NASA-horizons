@@ -6,7 +6,7 @@ import telnetlib
 
 class NASAhorizons(object):
     """A python wrapper for the NASA HORIZONS data service telnet interface
-    to query xyz-coordinates of objects. It uses the J2000 reference frame.
+    to query xyz-coordinates of objects. It uses the ICRF/J2000.0 reference frame.
     """
 
     __referenceframe = "J2000"
