@@ -124,9 +124,14 @@ def test_get_data3():
 
 
 def test_get_data4():
-    """test for same date"""
+    """test for same date/query one day"""
     foo = NASAhorizons()
     foo.set_object_id(199)
-    start = datetime.date(year=1977, month=9, day=10)
-    end = datetime.date(year=1977, month=9, day=10)
-    foo.get_data(start, end)
+    start = datetime.date(year=1977, month=1, day=1)
+    end = datetime.date(year=1977, month=1, day=1)
+    returndata = [
+        {'z': 0.01562549439448472,
+         'y': 0.2894764150799116,
+         'x': 0.09117860868439513,
+         'date': '1977-01-01T00:00:00.0000'}]
+    assert returndata == foo.get_data(start, end)
