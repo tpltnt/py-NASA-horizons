@@ -15,7 +15,9 @@ import telnetlib
 class NASAhorizons(object):
     """
     A python wrapper for the `NASA HORIZONS <http://ssd.jpl.nasa.gov/?horizons>`_ 
-    data service telnet interface to query xyz-coordinates of objects.
+    data service telnet interface to query xyz-coordinates of objects at
+    certain dates or date ranges. One step in a date range is currently
+    fixed to one day, but will be more granular in the future.
     It uses the ICRF/J2000.0 reference frame.
     """
 
@@ -196,6 +198,10 @@ class NASAhorizons(object):
         >>> end = datetime.date(year=1977, month=9, day=12)
         >>> nasa.get_data(start, end, format="list")
         [{'z': -0.02967482538878673, 'y': 0.02365967857453419, 'x': 0.3497488933057855, 'date': '1977-09-10T00:00:00.0000'}, {'z': -0.02647449350730847, 'y': 0.05283430192085586, 'x': 0.3408485768468899, 'date': '1977-09-11T00:00:00.0000'}, {'z': -0.02308289285966815, 'y': 0.08159238988582097, 'x': 0.3294953295232826, 'date': '1977-09-12T00:00:00.0000'}]
+
+        .. todo ::
+
+        * add flexibility to step size (currently fixed to one day)
         """
         # input sanity checks
         if not isinstance(start, datetime.date):
