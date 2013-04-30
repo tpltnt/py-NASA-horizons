@@ -188,7 +188,7 @@ class NASAhorizons(object):
         :param format: format of returned data
         :type format: str -- "list" (of dictionaires (default)) or "`json <http://json.org/>`_"
         :return: data in selected format
-        :raises: TypeError
+        :raises: Exception, TypeError
 
         >>> nasa = NASAhorizons()
         >>> nasa.set_object_id(199)
@@ -213,6 +213,9 @@ class NASAhorizons(object):
         if start == end:
             __samedayhack = True
             end.day += 1
+        # end sameday-hack
+        if None == self.__objectid:
+            raise Exception("no object ID set :( ... please do it next time")
         if not self.has_session():
             self.create_session()
         # telnetstring represent user input (without RET)
