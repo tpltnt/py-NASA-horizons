@@ -71,6 +71,7 @@ def test_convert_NASA_to_ISO_datestring1():
     with pytest.raises(TypeError):
         foo.convert_NASA_to_ISO_datestring(23)
 
+
 def test_get_data0():
     """known good test (also in docs)"""
     foo = NASAhorizons()
@@ -89,7 +90,7 @@ def test_get_data0():
         {'z': -0.02308289285966815,
          'y': 0.08159238988582097,
          'x': 0.3294953295232826,
-         'date': '1977-09-12T00:00:00.0000'} ]
+         'date': '1977-09-12T00:00:00.0000'}]
     assert returndata == foo.get_data(start, end, format="list")
 
 
