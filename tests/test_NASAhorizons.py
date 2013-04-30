@@ -90,7 +90,7 @@ def test_get_data0():
          'y': 0.08159238988582097,
          'x': 0.3294953295232826,
          'date': '1977-09-12T00:00:00.0000'} ]
-    assert returndata == nasa.get_data(start, end, format="list")
+    assert returndata == foo.get_data(start, end, format="list")
 
 
 def test_get_data1():
