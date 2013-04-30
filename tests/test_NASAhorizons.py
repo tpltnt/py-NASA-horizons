@@ -74,3 +74,38 @@ def test_convert_NASA_to_ISO_datestring1():
 #    """get (fake) data"""
 #    foo = NASAhorizons()
 #    assert '[{"x": 23}, {"y": 42}]' == foo.get_data()
+
+
+def test_get_data1():
+    """test for wrong year ordering"""
+    foo = NASAhorizons()
+    start = datetime.date(year=1978, month=9, day=10)
+    end = datetime.date(year=1977, month=9, day=10)
+    with pytest.raises(ValueError):
+        foo.get_data(start, end)
+
+
+def test_get_data2():
+    """test for wrong month ordering"""
+    foo = NASAhorizons()
+    start = datetime.date(year=1977, month=9, day=10)
+    end = datetime.date(year=1977, month=8, day=10)
+    with pytest.raises(ValueError):
+        foo.get_data(start, end)
+
+
+def test_get_data3():
+    """test for wrong day ordering"""
+    foo = NASAhorizons()
+    start = datetime.date(year=1977, month=9, day=11)
+    end = datetime.date(year=1977, month=9, day=10)
+    with pytest.raises(ValueError):
+        foo.get_data(start, end)
+
+
+def test_get_data4():
+    """test for same date"""
+    foo = NASAhorizons()
+    start = datetime.date(year=1977, month=9, day=10)
+    end = datetime.date(year=1977, month=9, day=10)
+    foo.get_data(start, end)
