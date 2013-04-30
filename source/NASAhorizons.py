@@ -212,7 +212,7 @@ class NASAhorizons(object):
         __samedayhack = False
         if start == end:
             __samedayhack = True
-            end.day += 1
+            end = end + datetime.timedelta(days=1)
         # end sameday-hack
         if None == self.__objectid:
             raise Exception("no object ID set :( ... please do it next time")
