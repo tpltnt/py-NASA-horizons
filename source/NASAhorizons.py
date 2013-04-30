@@ -37,7 +37,7 @@ class NASAhorizons(object):
 
         host = "horizons.jpl.nasa.gov"
         port = 6775
-        timeout = 9999
+        timeout = 120
 
         try:
             self.__telnetsession = telnetlib.Telnet(host, port, timeout)
