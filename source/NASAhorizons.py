@@ -197,11 +197,18 @@ class NASAhorizons(object):
         >>> nasa.get_data(start, end, format="list")
         [{'z': -0.02967482538878673, 'y': 0.02365967857453419, 'x': 0.3497488933057855, 'date': '1977-09-10T00:00:00.0000'}, {'z': -0.02647449350730847, 'y': 0.05283430192085586, 'x': 0.3408485768468899, 'date': '1977-09-11T00:00:00.0000'}, {'z': -0.02308289285966815, 'y': 0.08159238988582097, 'x': 0.3294953295232826, 'date': '1977-09-12T00:00:00.0000'}]
         """
-        # TODO: check for data context
+        # input sanity checks
         if not isinstance(start, datetime.date):
             raise TypeError("start has to be a datetime.date-object")
         if not isinstance(end, datetime.date):
             raise TypeError("end has to be a datetime.date-object")
+        if start.year < end.year:
+            raise ValueError("start year has to be at least end year")
+        if start.month < end.month:
+            raise ValueError("start month has to be at least end month")
+        if start.day < end.day:
+            raise ValueError("start day has to be at least end day")
+
         if not self.has_session():
             self.create_session()
         # telnetstring represent user input (without RET)
