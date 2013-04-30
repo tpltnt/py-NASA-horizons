@@ -23,6 +23,7 @@ references
 ==========
 
 * [NASA HORIZONS page](http://ssd.jpl.nasa.gov/?horizons)
+* [NASA HORIZONS User Manual](http://ssd.jpl.nasa.gov/?horizons_doc)
 * [ISO 8601](http://de.wikipedia.org/wiki/ISO_8601)
 * [RFC 854 - telnet](http://tools.ietf.org/html/rfc854.html)
 * [RFC 4180 - CSV](http://tools.ietf.org/html/rfc4180.html)

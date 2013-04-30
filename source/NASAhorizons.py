@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 A pure python 3 wrapper for the `NASA HORIZONS <http://ssd.jpl.nasa.gov/?horizons>`_
-data service.
+data service. A detailed user manual for the service can be found `here <http://ssd.jpl.nasa.gov/?horizons_doc>`_.
 
 .. moduleauthor:: tpltnt
 """
@@ -181,7 +181,9 @@ class NASAhorizons(object):
     def get_data(self, start, end, format="list"):
         """
         Retrieve data (xyz-coordinates) for formerly selected object.
-        A session will be initialized in the background if needed.
+        A session will be initialized in the background if needed. The
+        step size is one day, the measurement unit is AU-D without any
+        corrections.
 
         :param start: date of first datapoint to be requested
         :type start: datetime.date
