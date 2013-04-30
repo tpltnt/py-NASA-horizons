@@ -202,11 +202,11 @@ class NASAhorizons(object):
             raise TypeError("start has to be a datetime.date-object")
         if not isinstance(end, datetime.date):
             raise TypeError("end has to be a datetime.date-object")
-        if start.year < end.year:
+        if start.year > end.year:
             raise ValueError("start year has to be at least end year")
-        if start.month < end.month:
+        if start.month > end.month:
             raise ValueError("start month has to be at least end month")
-        if start.day < end.day:
+        if start.day > end.day:
             raise ValueError("start day has to be at least end day")
         # ugly hack to make things work with same date
         __samedayhack = False
