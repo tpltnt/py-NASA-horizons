@@ -70,10 +70,27 @@ def test_convert_NASA_to_ISO_datestring1():
     foo = NASAhorizons()
     with pytest.raises(TypeError):
         foo.convert_NASA_to_ISO_datestring(23)
-#def test_get_data0():
-#    """get (fake) data"""
-#    foo = NASAhorizons()
-#    assert '[{"x": 23}, {"y": 42}]' == foo.get_data()
+
+def test_get_data0():
+    """known good test (also in docs)"""
+    foo = NASAhorizons()
+    foo.set_object_id(199)
+    start = datetime.date(year=1977, month=9, day=10)
+    end = datetime.date(year=1977, month=9, day=12)
+    returndata = [
+        {'z': -0.02967482538878673,
+         'y': 0.02365967857453419,
+         'x': 0.3497488933057855,
+         'date': '1977-09-10T00:00:00.0000'},
+        {'z': -0.02647449350730847,
+         'y': 0.05283430192085586,
+         'x': 0.3408485768468899,
+         'date': '1977-09-11T00:00:00.0000'},
+        {'z': -0.02308289285966815,
+         'y': 0.08159238988582097,
+         'x': 0.3294953295232826,
+         'date': '1977-09-12T00:00:00.0000'} ]
+    assert returndata == nasa.get_data(start, end, format="list")
 
 
 def test_get_data1():
