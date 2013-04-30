@@ -111,8 +111,6 @@ class NASAhorizons(object):
             datestring += "Jan-"
         if 2 == dateobject.month:
             datestring += "Feb-"
-        if 1 == dateobject.month:
-            datestring += "Jan-"
         if 3 == dateobject.month:
             datestring += "Mar-"
         if 4 == dateobject.month:
