@@ -208,7 +208,11 @@ class NASAhorizons(object):
             raise ValueError("start month has to be at least end month")
         if start.day < end.day:
             raise ValueError("start day has to be at least end day")
-
+        # ugly hack to make things work with same date
+        __samedayhack = False
+        if start == end:
+            __samedayhack = True
+            end.day += 1
         if not self.has_session():
             self.create_session()
         # telnetstring represent user input (without RET)
@@ -289,6 +293,9 @@ class NASAhorizons(object):
                     x = float(fields[2].strip()),
                     y = float(fields[3].strip()),
                     z = float(fields[4].strip())))
+        # the same-day hack returns
+        if __samedayhack:
+            data.pop()
         # finally return data
         if "list" == format:
             return data
