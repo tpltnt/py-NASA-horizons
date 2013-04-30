@@ -8,8 +8,9 @@ to query, please consult the :doc:`major_body_sheet`.
 
 Getting location of an object at a certain date
 -----------------------------------------------
-To query one just one day, set start and end to the same date.
- 
+To query one just one day, set start and end to the same date. This example
+uses Mercury as the target object and 2013-01-01 as date.
+
 >>> import datetime
 >>> from NASAhorizons import NASAhorizons
 >>> # query position of Mercury for January 1st 2013
