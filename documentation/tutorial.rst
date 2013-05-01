@@ -52,4 +52,8 @@ Here we plot the path of Voyager I for its first 20 days relative to the sun.
 >>> fig.show()
 
 The result lookslike this:
+
 .. image:: images/Voyager-I.png
+    :scale: 80%
+    :align: center
+    :alt: path of Voyager I relative to the sun (first 20 days)
