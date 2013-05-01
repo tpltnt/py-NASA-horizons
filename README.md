@@ -2,9 +2,13 @@ py-NASA-horizons
 ================
 
 A pure python3 wrapper for JPL HORIZONS on-line solar system data and
-ephemeris computation service. It uses the telnet interface. The sourcecode
-can be found in the 'source' directory. The 'test' directory contains
-pytest-tests and the 'documentation' directory well ... the documentation.
+ephemeris computation service. Instead of using the official telnet interface,
+this module provides an object to interact with the service for data
+retrieval. The functionality is currently limited to x-y-z coordinates of
+major bodies, but can easily be extended.
+The sourcecode can be found in the 'source' directory. The 'test' directory
+contains pytest-tests and the 'documentation' directory well ... the
+documentation.
 
 quickstart
 ----------
