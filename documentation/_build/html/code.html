@@ -26,7 +26,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="top" title="py-NASA-horizon 0.1 documentation" href="index.html" />
-    <link rel="next" title="Major Bodies Overview" href="major_body_sheet.html" />
+    <link rel="next" title="Tutorial" href="tutorial.html" />
     <link rel="prev" title="Welcome to py-NASA-horizon’s documentation!" href="index.html" /> 
   </head>
   <body>
@@ -40,7 +40,7 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="major_body_sheet.html" title="Major Bodies Overview"
+          <a href="tutorial.html" title="Tutorial"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="index.html" title="Welcome to py-NASA-horizon’s documentation!"
@@ -57,12 +57,15 @@
   <div class="section" id="module-NASAhorizons">
 <span id="nasahorizons-overview"></span><h1>NASAHorizons overview<a class="headerlink" href="#module-NASAhorizons" title="Permalink to this headline">¶</a></h1>
 <p>A pure python 3 wrapper for the <a class="reference external" href="http://ssd.jpl.nasa.gov/?horizons">NASA HORIZONS</a>
-data service.</p>
+data service. A detailed user manual for the service can be found <a class="reference external" href="http://ssd.jpl.nasa.gov/?horizons_doc">here</a>.</p>
 <dl class="class">
 <dt id="NASAhorizons.NASAhorizons">
 <em class="property">class </em><tt class="descclassname">NASAhorizons.</tt><tt class="descname">NASAhorizons</tt><a class="reference internal" href="_modules/NASAhorizons.html#NASAhorizons"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NASAhorizons.NASAhorizons" title="Permalink to this definition">¶</a></dt>
 <dd><p>A python wrapper for the <a class="reference external" href="http://ssd.jpl.nasa.gov/?horizons">NASA HORIZONS</a> 
-data service telnet interface to query xyz-coordinates of objects.
+data service telnet interface to query xyz-coordinates of objects with
+the sun at the center. The coordinates are queried with respect to
+dates or date ranges. One step in a date range is currently fixed to one
+day, but will be more granular in the future.
 It uses the ICRF/J2000.0 reference frame.</p>
 <dl class="method">
 <dt id="NASAhorizons.NASAhorizons.close_session">
@@ -145,7 +148,9 @@ Calling this method <em>will destroy</em> your old connection.</p>
 <dt id="NASAhorizons.NASAhorizons.get_data">
 <tt class="descname">get_data</tt><big>(</big><em>start</em>, <em>end</em>, <em>format='list'</em><big>)</big><a class="reference internal" href="_modules/NASAhorizons.html#NASAhorizons.get_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NASAhorizons.NASAhorizons.get_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieve data (xyz-coordinates) for formerly selected object.
-A session will be initialized in the background if needed.</p>
+A session will be initialized in the background if needed. The
+step size is one day, the measurement unit is AU-D without any
+corrections.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -160,7 +165,7 @@ A session will be initialized in the background if needed.</p>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">data in selected format</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Raises :</th><td class="field-body"><p class="first last">TypeError</p>
+<tr class="field-odd field"><th class="field-name">Raises :</th><td class="field-body"><p class="first last">Exception, TypeError</p>
 </td>
 </tr>
 </tbody>
@@ -173,6 +178,12 @@ A session will be initialized in the background if needed.</p>
 <span class="go">[{&#39;z&#39;: -0.02967482538878673, &#39;y&#39;: 0.02365967857453419, &#39;x&#39;: 0.3497488933057855, &#39;date&#39;: &#39;1977-09-10T00:00:00.0000&#39;}, {&#39;z&#39;: -0.02647449350730847, &#39;y&#39;: 0.05283430192085586, &#39;x&#39;: 0.3408485768468899, &#39;date&#39;: &#39;1977-09-11T00:00:00.0000&#39;}, {&#39;z&#39;: -0.02308289285966815, &#39;y&#39;: 0.08159238988582097, &#39;x&#39;: 0.3294953295232826, &#39;date&#39;: &#39;1977-09-12T00:00:00.0000&#39;}]</span>
 </pre></div>
 </div>
+<div class="admonition-todo admonition" id="index-1">
+<p class="first last admonition-title">Todo</p>
+</div>
+<ul class="simple">
+<li>add flexibility to step size (currently fixed to one day)</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
@@ -227,8 +238,8 @@ Negative values indicate spacecrafts.</p>
   <p class="topless"><a href="index.html"
                         title="previous chapter">Welcome to py-NASA-horizon&#8217;s documentation!</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="major_body_sheet.html"
-                        title="next chapter">Major Bodies Overview</a></p>
+  <p class="topless"><a href="tutorial.html"
+                        title="next chapter">Tutorial</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/code.txt"
@@ -261,7 +272,7 @@ Negative values indicate spacecrafts.</p>
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="major_body_sheet.html" title="Major Bodies Overview"
+          <a href="tutorial.html" title="Tutorial"
              >next</a> |</li>
         <li class="right" >
           <a href="index.html" title="Welcome to py-NASA-horizon’s documentation!"

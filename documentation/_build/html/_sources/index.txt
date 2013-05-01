@@ -12,6 +12,7 @@ Contents:
    :maxdepth: 2
 
    code
+   tutorial
    major_body_sheet
 
 .. automodule:: NASAhorizons

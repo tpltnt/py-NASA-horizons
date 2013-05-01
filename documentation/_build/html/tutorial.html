@@ -1,0 +1,178 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Tutorial &mdash; py-NASA-horizon 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="py-NASA-horizon 0.1 documentation" href="index.html" />
+    <link rel="next" title="Major Bodies Overview" href="major_body_sheet.html" />
+    <link rel="prev" title="NASAHorizons overview" href="code.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="major_body_sheet.html" title="Major Bodies Overview"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="code.html" title="NASAHorizons overview"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">py-NASA-horizon 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="tutorial">
+<h1>Tutorial<a class="headerlink" href="#tutorial" title="Permalink to this headline">¶</a></h1>
+<p>This page provides some examples of using py-NASA-horizon. It can be used
+as a tutorial or as a cookbook. To find out the ID of the object you want
+to query, please consult the <a class="reference internal" href="major_body_sheet.html"><em>Major Bodies Overview</em></a>. In general, the
+interval size is one day, the measurement unit is AU-D without any
+corrections, and the sun is the center of the coordinate system.</p>
+<div class="section" id="getting-location-of-an-object-at-a-certain-date">
+<h2>Getting location of an object at a certain date<a class="headerlink" href="#getting-location-of-an-object-at-a-certain-date" title="Permalink to this headline">¶</a></h2>
+<p>To query one just one day, set start and end to the same date. This example
+uses Mercury as the target object and 2013-01-01 as date.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">datetime</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">NASAhorizons</span> <span class="kn">import</span> <span class="n">NASAhorizons</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># query position of Mercury for January 1st 2013</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">jpl</span> <span class="o">=</span> <span class="n">NASAhorizons</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">jpl</span><span class="o">.</span><span class="n">set_object_id</span><span class="p">(</span><span class="mi">199</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">qdate</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">(</span><span class="n">year</span><span class="o">=</span><span class="mi">1977</span><span class="p">,</span> <span class="n">month</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">day</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">jpl</span><span class="o">.</span><span class="n">get_data</span><span class="p">(</span><span class="n">qdate</span><span class="p">,</span> <span class="n">qdate</span><span class="p">))</span>
+<span class="go">[{&#39;date&#39;: &#39;1977-01-01T00:00:00.0000&#39;, &#39;z&#39;: 0.01562549439448472, &#39;x&#39;: 0.09117860868439513, &#39;y&#39;: 0.2894764150799116}]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="plot-path-of-a-spacecraft">
+<h2>Plot path of a spacecraft<a class="headerlink" href="#plot-path-of-a-spacecraft" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="matplotlib.org/">Matplotlib</a> can be used to plot the path of a spacecraft.
+Here we plot the path of Voyager I for its first 20 days relative to the sun.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">datetime</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">NASAhorizons</span> <span class="kn">import</span> <span class="n">NASAhorizons</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># query first 20 days of Voyager I relative to the sun</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">jpl</span> <span class="o">=</span> <span class="n">NASAhorizons</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">jpl</span><span class="o">.</span><span class="n">set_object_id</span><span class="p">(</span><span class="o">-</span><span class="mi">31</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">start</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">(</span><span class="n">year</span><span class="o">=</span><span class="mi">1977</span><span class="p">,</span> <span class="n">month</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span> <span class="n">day</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">end</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">(</span><span class="n">year</span><span class="o">=</span><span class="mi">1977</span><span class="p">,</span> <span class="n">month</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span> <span class="n">day</span><span class="o">=</span><span class="mi">26</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">alldata</span> <span class="o">=</span> <span class="n">jpl</span><span class="o">.</span><span class="n">get_data</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">format</span><span class="o">=</span><span class="s">&quot;list&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">xdata</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ydata</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">pos</span> <span class="ow">in</span> <span class="n">alldata</span><span class="p">:</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">xdata</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="s">&#39;x&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">ydata</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="s">&#39;y&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># plot data</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;first 20 days of Voyager I&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xdata</span><span class="p">,</span> <span class="n">ydata</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sun</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">Circle</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="mf">0.05</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;y&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gcf</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">add_artist</span><span class="p">(</span><span class="n">sun</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The result lookslike this:</p>
+<a class="reference internal image-reference" href="_images/Voyager-I.png"><img alt="path of Voyager I relative to the sun (first 20 days)" class="align-center" src="_images/Voyager-I.png" style="width: 640.0px; height: 480.0px;" /></a>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Tutorial</a><ul>
+<li><a class="reference internal" href="#getting-location-of-an-object-at-a-certain-date">Getting location of an object at a certain date</a></li>
+<li><a class="reference internal" href="#plot-path-of-a-spacecraft">Plot path of a spacecraft</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="code.html"
+                        title="previous chapter">NASAHorizons overview</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="major_body_sheet.html"
+                        title="next chapter">Major Bodies Overview</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/tutorial.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="major_body_sheet.html" title="Major Bodies Overview"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="code.html" title="NASAHorizons overview"
+             >previous</a> |</li>
+        <li><a href="index.html">py-NASA-horizon 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, tpltnt.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>
