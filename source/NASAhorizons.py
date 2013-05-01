@@ -15,9 +15,10 @@ import telnetlib
 class NASAhorizons(object):
     """
     A python wrapper for the `NASA HORIZONS <http://ssd.jpl.nasa.gov/?horizons>`_ 
-    data service telnet interface to query xyz-coordinates of objects at
-    certain dates or date ranges. One step in a date range is currently
-    fixed to one day, but will be more granular in the future.
+    data service telnet interface to query xyz-coordinates of objects with
+    the sun at the center. The coordinates are queried with respect to
+    dates or date ranges. One step in a date range is currently fixed to one
+    day, but will be more granular in the future.
     It uses the ICRF/J2000.0 reference frame.
     """
 
