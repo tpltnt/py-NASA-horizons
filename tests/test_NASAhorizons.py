@@ -24,10 +24,17 @@ def test_has_session():
     assert foo.has_session() is False
 
 
-def test_create_session():
+def test_create_session0():
     """test to create a telnet session. This should not time out."""
     foo = NASAhorizons()
     foo.create_session()
+
+
+def test_create_session1():
+    """test both session creation & selftest for it"""
+    foo = NASAhorizons()
+    foo.create_session()
+    assert foo.has_session() is True
 
 
 def test_close_session():
