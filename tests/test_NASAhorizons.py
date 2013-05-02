@@ -17,6 +17,13 @@ def test_init1():
     assert foo.has_session() is True
 
 
+
+def test_has_session():
+    """vanilla object should not have a session"""
+    foo = NASAhorizons()
+    assert foo.has_session() is False
+
+
 def test_create_telnetsession():
     """test to create a telnet session. This should not time out."""
     foo = NASAhorizons()
