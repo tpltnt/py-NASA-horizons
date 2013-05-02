@@ -24,7 +24,7 @@ def test_has_session():
     assert foo.has_session() is False
 
 
-def test_create_telnetsession():
+def test_create_session():
     """test to create a telnet session. This should not time out."""
     foo = NASAhorizons()
     foo.create_session()
