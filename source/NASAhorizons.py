@@ -57,6 +57,10 @@ class NASAhorizons(object):
         >>> nasa.create_session()
         >>> nasa.has_session()
         True
+
+        >>> nasa = NASAhorizons()
+        >>> nasa.has_session()
+        False
         """
         if None == self.__telnetsession:
             return False
