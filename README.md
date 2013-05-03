@@ -13,9 +13,12 @@ documentation.
 quickstart
 ----------
 
+* start coding by including the ```source``` directory into sys.path
+    * currently no pip package
 * run tests by typing ```py.test```
 * (re)build documentation by running ```cd documentation && make html```
 * HTML documentation path: documentation/_build/html/index.html
+
 
 TODO
 ----
